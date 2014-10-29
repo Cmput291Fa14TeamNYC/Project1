@@ -1,10 +1,6 @@
 package ca.ualberta.cmput291TeamNYC.project1;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Main {
 
@@ -18,6 +14,9 @@ public class Main {
 		String drivername = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
 
+//		String username = "yunita";
+//		String password = "yenchi12.";
+		
 		String username = "commande";
 		String password = "Alexsq2014";
 
