@@ -1,17 +1,47 @@
 package ca.ualberta.cmput291TeamNYC.project1;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Hello World");
+		System.out.println("Testing ojdbc.jar and connection");
+
+		Connection con = null;
+		Statement stmt= null;
+		ResultSet rs = null;
 		
-		System.out.println("Test");
-		
-		System.out.println("Man, nancy is awesome.");
-		
-		System.out.println("This should cause problems");
-		System.out.println("Yunita");
-		System.out.println("Test2");
-		System.out.println("Let's cause problems for yunita");
-	}	
+		String drivername = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+
+		String username = "commande";
+		String password = "Alexsq14";
+
+		try{
+			Class.forName(drivername);
+			con = DriverManager.getConnection(url, username, password);
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM PATIENT");
+			while(rs.next()){
+				System.out.println(rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try{
+				rs.close();
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
