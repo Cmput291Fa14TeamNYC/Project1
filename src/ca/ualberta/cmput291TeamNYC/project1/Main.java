@@ -14,14 +14,14 @@ import java.sql.*;
 public class Main {
 
 	public static void main(String[] args) {
-	/*	System.out.println("Testing ojdbc.jar and connection");
+		System.out.println("Testing ojdbc.jar and connection");
 
 		Connection con = null;
 		Statement stmt= null;
 		ResultSet rs = null;
 		
 		String drivername = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+		String url = "jdbc:oracle:thin:@localhost:1525:CRS";
 
 //		String username = "yunita";
 //		String password = "yenchi12.";
@@ -49,7 +49,7 @@ public class Main {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	
 	
 	
