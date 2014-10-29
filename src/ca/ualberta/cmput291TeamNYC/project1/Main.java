@@ -14,17 +14,14 @@ import java.sql.*;
 public class Main {
 
 	public static void main(String[] args) {
-	/*	System.out.println("Testing ojdbc.jar and connection");
+		System.out.println("Testing ojdbc.jar and connection");
 
 		Connection con = null;
 		Statement stmt= null;
 		ResultSet rs = null;
 		
 		String drivername = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-
-//		String username = "yunita";
-//		String password = "yenchi12.";
+		String url = "jdbc:oracle:thin:@localhost:1525:CRS";
 		
 		String username = "commande";
 		String password = "Alexsq2014";
@@ -37,6 +34,7 @@ public class Main {
 			while(rs.next()){
 				System.out.println(rs.getString("name"));
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -52,44 +50,44 @@ public class Main {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	
 	
 	
-	System.out.println("Main Menu");
-	System.out.println("1.Prescription");
-	System.out.println("2.Medical Test");
-	System.out.println("3.Patient Information Update");
-	System.out.println("4.Search Engine");
-	System.out.println("5.Exit");
-	
-	Scanner input = new Scanner(System.in);
-	int userInput = input.nextInt();
-	
-	switch (userInput) {
-	
-	case 1:
+		System.out.println("Main Menu");
 		System.out.println("1.Prescription");
-		break;
-		
-	case 2:
 		System.out.println("2.Medical Test");
-		break;
-	
-	case 3:
-		System.out.println("3.Patient");
-		break;
-		
-	case 4:
+		System.out.println("3.Patient Information Update");
 		System.out.println("4.Search Engine");
-		break;
+		System.out.println("5.Exit");
 		
-	case 5:
-		System.out.println("1.Exit");
-		break;
-	
-	
-	}
+		Scanner input = new Scanner(System.in);
+		int userInput = input.nextInt();
+		
+		switch (userInput) {
+		
+		case 1:
+			System.out.println("1.Prescription");
+			break;
+			
+		case 2:
+			System.out.println("2.Medical Test");
+			break;
+		
+		case 3:
+			System.out.println("3.Patient");
+			break;
+			
+		case 4:
+			System.out.println("4.Search Engine");
+			break;
+			
+		case 5:
+			System.out.println("1.Exit");
+			break;
+		
+		
+		}
 	
 	}
 }
