@@ -19,7 +19,7 @@ public class Main {
 		String url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
 
 		String username = "commande";
-		String password = "Alexsq14";
+		String password = "Alexsq2014";
 
 		try{
 			Class.forName(drivername);
