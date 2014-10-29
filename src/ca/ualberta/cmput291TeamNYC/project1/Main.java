@@ -35,9 +35,12 @@ public class Main {
 			e.printStackTrace();
 		} finally {
 			try{
-				rs.close();
-				stmt.close();
-				con.close();
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (con != null)
+					con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
