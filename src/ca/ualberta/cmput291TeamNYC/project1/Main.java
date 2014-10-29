@@ -26,15 +26,19 @@ public class Main {
 			while (rs.next()) {
 				System.out.println(rs.getString("name"));
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				rs.close();
-				stmt.close();
-				con.close();
+			try{
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (con != null)
+					con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -49,30 +53,31 @@ public class Main {
 
 		Scanner input = new Scanner(System.in);
 		int userInput = input.nextInt();
-
+		
 		switch (userInput) {
-
+		
 		case 1:
 			System.out.println("1.Prescription");
 			break;
-
+			
 		case 2:
 			System.out.println("2.Medical Test");
 			break;
-
+		
 		case 3:
 			System.out.println("3.Patient");
 			break;
-
+			
 		case 4:
 			System.out.println("4.Search Engine");
 			break;
-
+			
 		case 5:
 			System.out.println("1.Exit");
 			break;
-
+		
+		
 		}
-
+	
 	}
 }
