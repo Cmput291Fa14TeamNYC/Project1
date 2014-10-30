@@ -75,9 +75,8 @@ public class Main {
 			break;
 			
 		case 5:
-			System.out.println("1.Exit");
+			System.out.println("5.Exit");
 			break;
 		}
-	
 	}
 }
