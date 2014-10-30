@@ -1,4 +1,4 @@
-package ca.ualberta.cmput291TeamNYC.project1;
+package project1main;
 
 public class TestType {
 

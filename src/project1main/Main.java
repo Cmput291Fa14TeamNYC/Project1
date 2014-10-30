@@ -1,4 +1,4 @@
-package ca.ualberta.cmput291TeamNYC.project1;
+package project1main;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -43,13 +43,7 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-
-	
-	
-	
-	
-	
-
+		
 
 		System.out.println("Main Menu");
 
@@ -83,8 +77,6 @@ public class Main {
 		case 5:
 			System.out.println("1.Exit");
 			break;
-		
-		
 		}
 	
 	}
