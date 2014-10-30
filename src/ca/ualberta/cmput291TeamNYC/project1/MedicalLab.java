@@ -1,12 +1,12 @@
 package ca.ualberta.cmput291TeamNYC.project1;
 
-public class Medical_lab {
+public class MedicalLab {
 
 	private String lab_name;
 	private String address;
 	private String phone;
 
-	public Medical_lab() {
+	public MedicalLab() {
 	}
 
 	public String getLab_name() {

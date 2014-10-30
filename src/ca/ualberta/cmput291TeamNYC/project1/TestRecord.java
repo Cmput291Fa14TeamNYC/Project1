@@ -2,7 +2,7 @@ package ca.ualberta.cmput291TeamNYC.project1;
 
 import java.util.Date;
 
-public class Test_record {
+public class TestRecord {
 
 	private int test_id;
 	private int type_id;
@@ -13,7 +13,7 @@ public class Test_record {
 	private Date prescribe_date; // optional: casting to String
 	private Date test_date; // optional: casting to String
 
-	public Test_record() {
+	public TestRecord() {
 	}
 
 	public int getTest_id() {

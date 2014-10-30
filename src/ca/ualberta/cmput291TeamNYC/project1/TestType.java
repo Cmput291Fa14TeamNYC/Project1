@@ -1,13 +1,13 @@
 package ca.ualberta.cmput291TeamNYC.project1;
 
-public class Test_type {
+public class TestType {
 
 	private int type_id;
 	private String test_name;
 	private String pre_requirement;
 	private String test_procedure;
 
-	public Test_type() {
+	public TestType() {
 	}
 
 	public int getType_id() {
