@@ -39,4 +39,20 @@ public class DataSource {
 				e.printStackTrace();
 			}
 		}
+		
+		
+		
+		
+		public ResultSet checkForPatient(String patientName){
+			String patientQuery = "select NAME from PATIENT where NAME = '" + patientName + "'";
+			try {
+				rs = stmt.executeQuery(patientQuery);
+			} catch (SQLException e) {
+				System.out.println("Patient table does not exist");
+				e.printStackTrace();
+			}
+			return rs;
+			}
+			
+		
 }
