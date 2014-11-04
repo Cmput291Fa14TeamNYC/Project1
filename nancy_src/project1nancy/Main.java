@@ -27,9 +27,9 @@ public class Main {
 			
 		case 2:
 			System.out.println("2.Medical Test");
-			MedicalLab m = new MedicalLab();
-			m.enterMedicalInfo();
-			//enterMedicalInfo();
+			//MedicalLab m = new MedicalLab();
+			//m.enterMedicalInfo();
+			enterMedicalInfo();
 			break;
 		
 		case 3:
@@ -51,8 +51,8 @@ public class Main {
 	public static void enterMedicalInfo(){
 		String username = "commande";
 		String password = "Alexsq2014";
-		String patientName,  doctorName, testResult;
-		int healthNum;
+		String patientName, testResult, medLabName, date;
+		int healthNum, doctorNum;
 		DataSource data = new DataSource(username, password);
 
 
@@ -64,20 +64,24 @@ public class Main {
 	Scanner s2 = new Scanner(System.in);
 	healthNum = s2.nextInt();
 	
-	System.out.println("Name of Doctor: ");
+	System.out.println("Employee Number of Doctor: ");
 	Scanner s3 = new Scanner(System.in);
-	doctorName = s3.nextLine();
+	doctorNum = s3.nextInt();
 	
 	System.out.println("Please enter test results: ");
 	Scanner s4 = new Scanner(System.in);
 	testResult = s4.nextLine();
 
+	System.out.println("Enter name of medical lab: ");
+	Scanner s5 = new Scanner(System.in);
+	medLabName = s5.nextLine();
+	
+	System.out.println("Enter date of test DD-MM-YY: ");
+	Scanner s6 = new Scanner(System.in);
+	date = s6.nextLine();
 	
 	
-	
-	//data.enterTestResult(patientName, healthNum, doctorName, testResult);
-
-	System.out.println(patientName + " " + healthNum);
+	data.updateTestResult(patientName, healthNum, doctorNum, testResult, medLabName, date);
 	
 	
 	}

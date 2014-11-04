@@ -37,7 +37,7 @@ public class MedicalLab {
 	testResult = s4.nextLine();
 
 	
-	System.out.println(patientName + " " + healthNum);
+//	System.out.println(patientName + " " + healthNum);
 	enterTestResult(patientName, healthNum, doctorName, testResult);
 	
 	
@@ -52,12 +52,24 @@ public class MedicalLab {
 			String password = "Alexsq2014";
 			DataSource data = new DataSource(username, password);
 			try {
-				if(data.checkForPatient(patientName).next()){
+				//Check if the patient name exists
+				if(data.checkForPatientName(patientName).next()){
 					System.out.println(patientName);
 				}
 				else{
 					System.out.println("THERE IS NO SUCH PATIENT");
 				}
+				
+				//check if the patient's health care number exists
+				if(data.checkForPatientNum(healthNum).next()){
+					System.out.println(healthNum);
+				}
+				else{
+					System.out.println("THERE IS NO SUCH PATIENT");
+				}
+				
+				
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
