@@ -27,6 +27,9 @@ public class Main {
 			
 		case 2:
 			System.out.println("2.Medical Test");
+			MedicalLab m = new MedicalLab();
+			m.enterMedicalInfo();
+			//enterMedicalInfo();
 			break;
 		
 		case 3:
@@ -38,9 +41,44 @@ public class Main {
 			break;
 			
 		case 5:
-			System.out.println("1.Exit");
+			System.out.println("5.Exit");
 			break;
 		}
+	
+	}
+	
+	
+	public static void enterMedicalInfo(){
+		String username = "commande";
+		String password = "Alexsq2014";
+		String patientName,  doctorName, testResult;
+		int healthNum;
+		DataSource data = new DataSource(username, password);
+
+
+	System.out.println("Please enter the name of the patient: ");
+	Scanner s1 = new Scanner(System.in);
+	patientName = s1.nextLine();
+	
+	System.out.println("Please enter health care number of patient " + patientName + ":");
+	Scanner s2 = new Scanner(System.in);
+	healthNum = s2.nextInt();
+	
+	System.out.println("Name of Doctor: ");
+	Scanner s3 = new Scanner(System.in);
+	doctorName = s3.nextLine();
+	
+	System.out.println("Please enter test results: ");
+	Scanner s4 = new Scanner(System.in);
+	testResult = s4.nextLine();
+
+	
+	
+	
+	//data.enterTestResult(patientName, healthNum, doctorName, testResult);
+
+	System.out.println(patientName + " " + healthNum);
+	
 	
 	}
 }
