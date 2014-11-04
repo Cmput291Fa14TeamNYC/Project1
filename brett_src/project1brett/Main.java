@@ -17,46 +17,58 @@ public class Main {
 		// Connect to the database;
 		ds = new DataSource(DB_URL, DB_USERNAME, DB_PASSWORD);
 		
-		// Display Main Menu
-		System.out.println("Main Menu");
-		System.out.println("1.Prescription");
-		System.out.println("2.Medical Test");
-		System.out.println("3.Patient Information Update");
-		System.out.println("4.Search Engine");
-		System.out.println("5.Exit");
+		while (true) {
+			// Display Main Menu
+			System.out.println("Main Menu");
+			System.out.println("1.Prescription");
+			System.out.println("2.Medical Test");
+			System.out.println("3.Patient Information Update");
+			System.out.println("4.Search Engine");
+			System.out.println("0.Exit");
 
-		Scanner input = new Scanner(System.in);
-		int userInput = input.nextInt();
-		
-		switch (userInput) {
-		
-			case 1:
-				System.out.println("1.Prescription");
-				break;
-				
-			case 2:
-				System.out.println("2.Medical Test");
-				break;
+			Scanner input = new Scanner(System.in);
+			int userInput = 0;
+			try {
+				userInput = input.nextInt();
+			} catch (Exception e) {
+				System.out.println("Please enter a number from the given options.");
+				continue;
+			}
 			
-			case 3:
-				/* Patient Information Update
-				 * --------------------------
-				 * This component is used to enter the information of a 
-				 * new patient or to update the information of an existing 
-				 * patient. All the information about a patient, except 
-				 * the health_care_no for an existing patient, may be updated.
-				 */
-				runPatientInformationUpdate();
-				break;
+			switch (userInput) {
+			
+				case 1:
+					System.out.println("1.Prescription");
+					break;
+					
+				case 2:
+					System.out.println("2.Medical Test");
+					break;
 				
-			case 4:
-				System.out.println("4.Search Engine");
-				break;
-				
-			case 5:
-				System.out.println("5.Exit");
-				break;
+				case 3:
+					/* Patient Information Update
+					 * --------------------------
+					 * This component is used to enter the information of a 
+					 * new patient or to update the information of an existing 
+					 * patient. All the information about a patient, except 
+					 * the health_care_no for an existing patient, may be updated.
+					 */
+					runPatientInformationUpdate();
+					break;
+					
+				case 4:
+					System.out.println("4.Search Engine");
+					break;
+					
+				case 0:
+					System.out.println("Goodbye");
+					return;
+					
+				default:
+					System.out.println("Please enter a number from the given options.");
+			}
 		}
+		
 
 	}
 
@@ -68,8 +80,13 @@ public class Main {
 			System.out.println("Enter 0 to go back.");
 			System.out.println("Please enter the patient's Health Care No.:");
 			Scanner input = new Scanner(System.in);
-			int health_care_no = input.nextInt();
-		
+			int health_care_no = 0;
+			try {
+				health_care_no = input.nextInt();
+			} catch (Exception e) {
+				System.out.println("Please enter a valid Health Care No.");
+				continue;
+			}
 			// Exit program if user chooses to do so.
 			if (health_care_no == 0) 
 				return;
@@ -85,20 +102,19 @@ public class Main {
 	public static void promptPatientFieldSelection(int health_care_no) {
 		
 		while (true) {
-			// Get patient associated with provided number
-			Patient patient = ds.getPatient(health_care_no);
-			if (patient != null) {
-				System.out.println("Patient with Health Care No. " + health_care_no +" found:");
-				System.out.println("1.Name: " + patient.getName());
-				System.out.println("2.Address: " + patient.getAddress());
-				System.out.println("3.Phone: " + patient.getPhone());
-				System.out.println("4.Birthday: " + patient.getBirth_day());
-				System.out.println("0.Go back");
-			} else {
-				System.out.println("Could not find a patient with Health Care No. " + health_care_no);
-				continue;
-			}
 			
+			Patient patient = ds.getPatient(health_care_no);
+			if (patient == null) {
+				System.out.println("Could not find a patient with Health Care No. " + health_care_no);
+				return;
+			}
+		
+			System.out.println("Patient with Health Care No. " + health_care_no +" found:");
+			System.out.println("1.Name: " + patient.getName());
+			System.out.println("2.Address: " + patient.getAddress());
+			System.out.println("3.Phone: " + patient.getPhone());
+			System.out.println("4.Birthday: " + patient.getBirth_day());
+			System.out.println("0.Go back");
 			System.out.println("Select a field to edit: ");
 			
 			Scanner input = new Scanner(System.in);
@@ -120,7 +136,7 @@ public class Main {
 				case 0:
 					return;
 				default:
-					System.out.println("Please select from the given options.");
+					System.out.println("Please select a number from the given options.");
 					continue;
 			}
 		}

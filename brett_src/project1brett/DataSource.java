@@ -220,11 +220,10 @@ public class DataSource {
 		
 		try {
 			stmt.executeUpdate(patientUpdate);
+			con.commit();
 			System.out.println("Patient updated.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Could not update patient with Health Care No. " + health_care_no);
+			System.out.println("Sorry, could not update " + field);
 		}
 	}
 
