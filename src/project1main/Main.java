@@ -14,7 +14,6 @@ public class Main {
 
 		String drivername = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1525:CRS";
-
 		String username = "commande";
 		String password = "Alexsq2014";
 
