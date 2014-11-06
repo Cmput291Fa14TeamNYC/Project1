@@ -106,7 +106,8 @@ public class DataSource {
 				i++;
 				}
 			}
-		
+			if(counter == 0)
+				System.out.println("There is no test records for this patient");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("There is no test records for this patient");
@@ -150,7 +151,7 @@ public class DataSource {
 					testId.add(typeId);
 								
 					
-					
+					//Print out a list of patients information from test records
 					System.out.println(counter + ". " + "Patient Name : " + patientInfo);
 					System.out.println("Health Care Number: " + healthNum.get(i));
 					System.out.println("Doctor Employee No. : " + doctorNum.get(i));

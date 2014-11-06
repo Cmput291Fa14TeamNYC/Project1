@@ -69,6 +69,9 @@ public class Main {
 	}
 	
 	public static void enterMedicalInfo(){
+		
+		
+		while(data.counter == 0){
 		System.out.println("Enter Name or health care number of patient: ");
 		Scanner s1 = new Scanner (System.in);
 		name = s1.nextLine();
@@ -76,11 +79,11 @@ public class Main {
 		
 		System.out.println("List of Patients: ");
 		
-		data.testRecordInfo( name);
+		data.testRecordInfo(name);
 		
+		}
 		
 		choosePatientList(name);
-		
 		
 		
 		
