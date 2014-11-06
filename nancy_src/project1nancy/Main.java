@@ -3,7 +3,22 @@ package project1nancy;
 import java.sql.*;
 import java.util.Scanner;
 
+import project1main.Patient;
+
 public class Main {
+	
+	static String username = "commande";
+	static String password = "Alexsq2014";
+	static String name;
+	static String testResult;
+	static String medLabName;
+	static String date;
+	static int health_care_no;
+	static int employee_no;
+	static int testId;
+	static int doctorNum;
+	static DataSource data = new DataSource(username, password);
+
 
 	public static void main(String[] args) {
 /*connect to data source once in main application*/
@@ -27,9 +42,8 @@ public class Main {
 			
 		case 2:
 			System.out.println("2.Medical Test");
-			//MedicalLab m = new MedicalLab();
-			//m.enterMedicalInfo();
 			enterMedicalInfo();
+		
 			break;
 		
 		case 3:
@@ -47,42 +61,54 @@ public class Main {
 	
 	}
 	
-	
 	public static void enterMedicalInfo(){
-		String username = "commande";
-		String password = "Alexsq2014";
-		String patientName, testResult, medLabName, date;
-		int healthNum, doctorNum;
-		DataSource data = new DataSource(username, password);
-
-
-	System.out.println("Please enter the name of the patient: ");
-	Scanner s1 = new Scanner(System.in);
-	patientName = s1.nextLine();
+		System.out.println("Enter Name or health care number of patient: ");
+		Scanner s1 = new Scanner (System.in);
+		name = s1.nextLine();
+		
+		
+		System.out.println("List of Patients: ");
+		
+		data.testRecordInfo(employee_no, name);
+			
+		choosePatientList(name);
+		
+		
+	}
 	
-	System.out.println("Please enter health care number of patient " + patientName + ":");
-	Scanner s2 = new Scanner(System.in);
-	healthNum = s2.nextInt();
-	
-	System.out.println("Employee Number of Doctor: ");
-	Scanner s3 = new Scanner(System.in);
-	doctorNum = s3.nextInt();
-	
-	System.out.println("Please enter test results: ");
-	Scanner s4 = new Scanner(System.in);
-	testResult = s4.nextLine();
-
-	System.out.println("Enter name of medical lab: ");
-	Scanner s5 = new Scanner(System.in);
-	medLabName = s5.nextLine();
-	
-	System.out.println("Enter date of test DD-MM-YY: ");
-	Scanner s6 = new Scanner(System.in);
-	date = s6.nextLine();
-	
-	
-	data.updateTestResult(patientName, healthNum, doctorNum, testResult, medLabName, date);
+	public static void choosePatientList(String name){
+		
+		int healthNum;
+		System.out.println("Please enter a number to choose from the list");
+		Scanner input = new Scanner (System.in);
+		int in = input.nextInt();
+		
+		
+		healthNum = data.healthNum.get(in);
+		testId = data.testId.get(in);
+		doctorNum = data.doctorNum.get(in);
+		
+		System.out.println("Test Record retrieved for: " + name);
+		System.out.println("Health Care: " + healthNum);
+		System.out.println("Test Id: " + testId + "\n");
+		
+		enterTestResult(healthNum, testId, doctorNum );
+	}
 	
 	
+	public static void enterTestResult(int healthNum, int testId, int doctorNum){
+		System.out.println("Enter Name of medical lab: ");
+		Scanner s1 = new Scanner (System.in);
+		medLabName = s1.nextLine();
+		
+		System.out.println("Enter date of test: ");
+		Scanner s2 = new Scanner (System.in);
+		date = s2.nextLine();
+		
+		System.out.println("Enter test result: ");
+		Scanner s3 = new Scanner (System.in);
+		testResult = s3.nextLine();
+		
+		data.updateTestResult(name, healthNum, doctorNum, testResult, medLabName, date, testId);
 	}
 }

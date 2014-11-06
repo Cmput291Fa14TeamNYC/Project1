@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
+
+import project1main.Patient;
+import project1main.TestRecord;
 
 public class DataSource {
 
@@ -14,6 +18,12 @@ public class DataSource {
 		private ResultSet rs = null;
 		private final String DRIVERNAME = "oracle.jdbc.driver.OracleDriver";
 		private final String URL = "jdbc:oracle:thin:@localhost:1525:CRS";
+		int counter = 0;
+		int health_care_no;
+		int typeId;
+		Vector<Integer> healthNum = new Vector<Integer>();
+		Vector<Integer> testId = new Vector<Integer>();
+		Vector<Integer> doctorNum = new Vector<Integer>();
 		
 		public DataSource(String username, String password){			
 			try {
@@ -28,117 +38,118 @@ public class DataSource {
 				e.printStackTrace();
 			}
 		}
+				
+	
+	
+	public ResultSet testRecordInfo(int employee_no, String patientInfo){
+		int i = 0;
 		
-		public void select(String column, String tablename){
-			try {
-				rs = stmt.executeQuery("SELECT " + column + " FROM " + tablename);
-				while (rs.next()) {
-					System.out.println(rs.getString("name"));
+		try {
+			if(isInteger(patientInfo)){
+				String testRecordQuery = "SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id FROM patient p, test_record t WHERE " +
+				" p.health_care_no = " + Integer.parseInt(patientInfo) + " AND t.patient_no = p.health_care_no";
+				rs = stmt.executeQuery(testRecordQuery);
+				while(rs.next()){
+					
+					patientInfo = rs.getString("name");
+					employee_no = rs.getInt("employee_no");
+					health_care_no = rs.getInt("health_care_no");
+					typeId = rs.getInt("test_id");
+					
+					
+					healthNum.add(health_care_no);
+					doctorNum.add(employee_no);
+					testId.add(typeId);
+								
+								
+					System.out.println(counter + ". " + "Patient Name : " + patientInfo);
+					System.out.println("Health Care Number: " + healthNum.get(i));
+					System.out.println("Doctor Employee No. : " + doctorNum.get(i));
+					System.out.println("Test ID: " + testId.get(i) + "\n");
+					counter++;
+					i++;
+				
 				}
-			} catch (SQLException e) {
-				System.out.println("Patient table does not exist.");
-				e.printStackTrace();
+				
 			}
-		}
-		
-		
-		//SQL STATEMETS 
-		public ResultSet checkForPatientName(String patientName){
-			String patientQuery = "SELECT name FROM patient WHERE name = '" + patientName + "'";
-			try {
-				rs = stmt.executeQuery(patientQuery);
-			} catch (SQLException e) {
-				System.out.println("Patient table does not exist");
-				e.printStackTrace();
+			else{
+				String testRecordQuery = "SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id FROM patient p, test_record t WHERE " +
+				" t.patient_no = p.health_care_no AND p.name = '" + patientInfo + "'";
+				rs = stmt.executeQuery(testRecordQuery);
+				while(rs.next()){
+				
+				patientInfo = rs.getString("name");
+				employee_no = rs.getInt("employee_no");
+				health_care_no = rs.getInt("health_care_no");
+				typeId = rs.getInt("test_id");
+				
+				healthNum.add(health_care_no);
+				doctorNum.add(employee_no);
+				testId.add(typeId);
+							
+							
+				System.out.println(counter + ". " + "Patient Name : " + patientInfo);
+				System.out.println("Health Care Number: " + healthNum.get(i));
+				System.out.println("Doctor Employee No. : " + doctorNum.get(i));
+				System.out.println("Test ID: " + testId.get(i) + "\n");
+				counter++;
+				i++;
+				}
 			}
-			return rs;
-			}
+							
 			
-		public ResultSet checkForPatientNum(int healthNum){
-			String patientQuery = "SELECT health_care_no FROM patient WHERE health_care_no = '" + healthNum+"'";
-			try {
-				rs = stmt.executeQuery(patientQuery);
-			} catch (SQLException e) {
-				System.out.println("Patient table does not exist");
-				e.printStackTrace();
-			}
-			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		public ResultSet checkForDoctorNum(int doctorNum){
-			String doctorQuery = "SELECT employee_no FROM doctor WHERE employee_no = '" + doctorNum+"'";
-			try {
-				rs = stmt.executeQuery(doctorQuery);
-			} catch (SQLException e) {
-				System.out.println("Doctor table does not exist");
-				e.printStackTrace();
-			}
-			return rs;
-		}
+		return rs;
 		
-		/*If there exists such a patient and test record and prescription
-		 * then allow the user to enter in the information of the test
-		 * such as lab name, test date, the test result**/
-		
-		public void updateTestResult(String patientName, int healthNum, int doctorNum, String testResult, 
-				String medLabName, String date){
-			try {
-				//Check if the patient name exists
-				if(checkForPatientName(patientName).next() && checkForPatientNum(healthNum).next()
-						&& checkForDoctorNum(doctorNum).next() ){
-					System.out.println(patientName + " " + healthNum + " " + doctorNum);
-					
-					
-					PreparedStatement updateRecord = null;
+	}
+	
+	
+	/*If there exists such a patient and test record and prescription
+	 * then allow the user to enter in the information of the test
+	 * such as lab name, test date, the test result**/
+	
+	public void updateTestResult(String patientName, int healthNum, int doctorNum, String testResult, 
+			String medLabName, String date, int testId){
+		try {
 				
-					
-					String updateTestQuery = "UPDATE test_record SET result = ?, test_date = ? "
-						+ " WHERE patient_no = " + healthNum;  
-					
-					updateRecord = con.prepareStatement(updateTestQuery);
-					
-					
-					updateRecord.setString(1, testResult );
-					updateRecord.setString(2, date );
-					
-					
-					updateRecord.executeUpdate();
-					
-					con.commit();
-					System.out.println("Test Results have been added for " + patientName);
-				}
-				else{
-					System.out.println("The prescription for " + patientName + " does not exist. Please check" +
-							" your entries");
-				}
-				/*else{
-					System.out.println("THERE IS NO SUCH PATIENT");
-				}*/
-				
-				//check if the patient's health care number exists
-				/*if(checkForPatientNum(healthNum).next()){
-					System.out.println(healthNum);
-				}
-				else{
-					System.out.println("THERE IS NO SUCH PATIENT");
-				}*/
-				
-				//check if the doctor's employee number exists
-				/*if(checkForDoctorNum(doctorNum).next()){
-					System.out.println(doctorNum);
-				}
-				else{
-					System.out.println("THERE IS NO SUCH DOCTOR");
-				}*/
-				
+				PreparedStatement updateRecord = null;
 			
 				
+				String updateTestQuery = "UPDATE test_record SET medical_lab = ?, result = ?, test_date = ? "
+					+ " WHERE patient_no = " + healthNum + " AND test_id = " + testId;  
+				
+				updateRecord = con.prepareStatement(updateTestQuery);
+				
+				updateRecord.setString(1, medLabName );
+				updateRecord.setString(2, testResult );
+				updateRecord.setString(3, date );
 				
 				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Your request cannot be completed. Please check your entries");
-				e.printStackTrace();
+				updateRecord.executeUpdate();
+				
+				con.commit();
+				System.out.println("Test Results have been added for " + patientName);
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Your request cannot be completed. Please check your entries");
+			e.printStackTrace();
+		}
+	}
+	
+		public static boolean isInteger(String s) {
+			try {
+				Integer.parseInt(s);
+				return true;
+			} catch (Exception e) {
+				return false;
 			}
 		}
 		
