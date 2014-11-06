@@ -21,6 +21,10 @@ public class Main {
 
 
 	public static void main(String[] args) {
+		menu();
+	}
+	
+	public static void menu(){
 /*connect to data source once in main application*/
 		
 		System.out.println("Main Menu");
@@ -29,7 +33,7 @@ public class Main {
 		System.out.println("2.Medical Test");
 		System.out.println("3.Patient Information Update");
 		System.out.println("4.Search Engine");
-		System.out.println("5.Exit");
+		System.out.println("0.Exit");
 
 		Scanner input = new Scanner(System.in);
 		int userInput = input.nextInt();
@@ -55,9 +59,11 @@ public class Main {
 			searchEngine();
 			break;
 			
-		case 5:
-			System.out.println("5.Exit");
+		case 0:
+			System.out.println("0.Exit");
 			break;
+			
+			
 		}
 	
 	}
@@ -117,18 +123,28 @@ public class Main {
 	}
 	
 	public static void searchEngine(){
-		System.out.println("Enter Name or health care number of patient: ");
+		
+		
+		while(data.counter == 0 || true){
+		System.out.println("\n" + "Enter Name or health care number of patient: ");
 		Scanner s1 = new Scanner (System.in);
 		name = s1.nextLine();
 		
-		//if(data.exists == true){
+		
 			System.out.println("List of Patients: ");
 			
 			data.searchEngineInfo(name);
-			//}
-			//else{
-			//	System.out.println("There is no such patient");
-			//}
+			
+			System.out.println("Enter '0' to go back to the main menu");
+			
+			if(name.compareTo("0") == 0)
+				menu();
+			else
+			continue;
+			
+	break;	
+	}
+			
 		
 	}
 	

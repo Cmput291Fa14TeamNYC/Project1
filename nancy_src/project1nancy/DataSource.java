@@ -23,7 +23,6 @@ public class DataSource {
 		int typeId;
 		int employee_no;
 		String test_name, result, date;
-		boolean exists = false;
 		Vector<Integer> healthNum = new Vector<Integer>();
 		Vector<Integer> testId = new Vector<Integer>();
 		Vector<Integer> doctorNum = new Vector<Integer>();
@@ -107,10 +106,10 @@ public class DataSource {
 				i++;
 				}
 			}
-							
-			
+		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println("There is no test records for this patient");
 			e.printStackTrace();
 		}
 		
@@ -122,6 +121,7 @@ public class DataSource {
 	public ResultSet searchEngineInfo(String patientInfo){
 		int i = 0;
 		counter = 0;
+		
 		try {
 			if(isInteger(patientInfo)){
 				
@@ -149,7 +149,8 @@ public class DataSource {
 					doctorNum.add(employee_no);
 					testId.add(typeId);
 								
-								
+					
+					
 					System.out.println(counter + ". " + "Patient Name : " + patientInfo);
 					System.out.println("Health Care Number: " + healthNum.get(i));
 					System.out.println("Doctor Employee No. : " + doctorNum.get(i));
@@ -174,6 +175,7 @@ public class DataSource {
 				
 				
 				rs = stmt.executeQuery(testRecordQuery);
+				
 				while(rs.next()){
 				
 				patientInfo = rs.getString("name");
@@ -199,13 +201,14 @@ public class DataSource {
 				counter++;
 				i++;
 				}
-			}
-							
+			}					
+		if(counter == 0)
+			System.out.println("There is no test records for this patient");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Patient cannot be found");
 		}
+		
 		
 		return rs;
 		
@@ -246,6 +249,10 @@ public class DataSource {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
 	
 		public static boolean isInteger(String s) {
 			try {
