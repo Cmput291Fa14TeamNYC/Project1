@@ -21,6 +21,8 @@ public class DataSource {
 		int counter = 0;
 		int health_care_no;
 		int typeId;
+		int employee_no;
+		String test_name, result, date;
 		Vector<Integer> healthNum = new Vector<Integer>();
 		Vector<Integer> testId = new Vector<Integer>();
 		Vector<Integer> doctorNum = new Vector<Integer>();
@@ -39,15 +41,18 @@ public class DataSource {
 			}
 		}
 				
-	
-	
-	public ResultSet testRecordInfo(int employee_no, String patientInfo){
+	///***NANCY***///
+	/*Gets information from the test records to list out existing patients*/
+	public ResultSet testRecordInfo(String patientInfo){
 		int i = 0;
-		
+		counter = 0;
 		try {
 			if(isInteger(patientInfo)){
-				String testRecordQuery = "SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id FROM patient p, test_record t WHERE " +
-				" p.health_care_no = " + Integer.parseInt(patientInfo) + " AND t.patient_no = p.health_care_no";
+				String testRecordQuery = 
+					"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id " +
+					"FROM patient p, test_record t " +
+					"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
+					" AND t.patient_no = p.health_care_no";
 				rs = stmt.executeQuery(testRecordQuery);
 				while(rs.next()){
 					
@@ -73,8 +78,13 @@ public class DataSource {
 				
 			}
 			else{
-				String testRecordQuery = "SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id FROM patient p, test_record t WHERE " +
-				" t.patient_no = p.health_care_no AND p.name = '" + patientInfo + "'";
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id "+
+				"FROM patient p, test_record t " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND p.name = '" + patientInfo + "'";
+				
+				
 				rs = stmt.executeQuery(testRecordQuery);
 				while(rs.next()){
 				
@@ -106,7 +116,97 @@ public class DataSource {
 		return rs;
 		
 	}
-	
+	////////
+	/*SEARCH ENGINE*/
+	public ResultSet searchEngineInfo(String patientInfo){
+		int i = 0;
+		counter = 0;
+		try {
+			if(isInteger(patientInfo)){
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, " +
+				"t.test_id, t.type_id, tt.type_id, tt.test_name, t.test_date, t.result " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
+				" AND t.patient_no = p.health_care_no " +
+				"AND t.type_id = tt.type_id";
+				
+				rs = stmt.executeQuery(testRecordQuery);
+				while(rs.next()){
+					
+					patientInfo = rs.getString("name");
+					employee_no = rs.getInt("employee_no");
+					health_care_no = rs.getInt("health_care_no");
+					typeId = rs.getInt("test_id");
+					test_name = rs.getString("test_name");
+					result = rs.getString("result");
+					date = rs.getString("test_date");
+					
+					healthNum.add(health_care_no);
+					doctorNum.add(employee_no);
+					testId.add(typeId);
+								
+								
+					System.out.println(counter + ". " + "Patient Name : " + patientInfo);
+					System.out.println("Health Care Number: " + healthNum.get(i));
+					System.out.println("Doctor Employee No. : " + doctorNum.get(i));
+					System.out.println("Test ID: " + testId.get(i));
+					System.out.println("Test Name: " + test_name);
+					System.out.println("Test Result: " + result);
+					System.out.println("Test Date: " + date + "\n");
+					counter++;
+					i++;
+				
+				}
+				
+			}
+			else{
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id, "+
+				"t.type_id, tt.type_id, tt.test_name, t.result, t.test_date " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND p.name = '" + patientInfo + "'" +
+				" AND t.type_id = tt.type_id";
+				
+				
+				rs = stmt.executeQuery(testRecordQuery);
+				while(rs.next()){
+				
+				patientInfo = rs.getString("name");
+				employee_no = rs.getInt("employee_no");
+				health_care_no = rs.getInt("health_care_no");
+				typeId = rs.getInt("test_id");
+				test_name = rs.getString("test_name");
+				result = rs.getString("result");
+				date = rs.getString("test_date");
+				
+				healthNum.add(health_care_no);
+				doctorNum.add(employee_no);
+				testId.add(typeId);
+							
+							
+				System.out.println(counter + ". " + "Patient Name : " + patientInfo);
+				System.out.println("Health Care Number: " + healthNum.get(i));
+				System.out.println("Doctor Employee No. : " + doctorNum.get(i));
+				System.out.println("Test ID: " + testId.get(i));
+				System.out.println("Test Name: " + test_name);
+				System.out.println("Test Result: " + result);
+				System.out.println("Test Date: " + date + "\n");
+				counter++;
+				i++;
+				}
+			}
+							
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return rs;
+		
+	}
 	
 	/*If there exists such a patient and test record and prescription
 	 * then allow the user to enter in the information of the test

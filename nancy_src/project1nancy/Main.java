@@ -52,6 +52,7 @@ public class Main {
 			
 		case 4:
 			System.out.println("4.Search Engine");
+			searchEngine();
 			break;
 			
 		case 5:
@@ -69,7 +70,7 @@ public class Main {
 		
 		System.out.println("List of Patients: ");
 		
-		data.testRecordInfo(employee_no, name);
+		data.testRecordInfo( name);
 			
 		choosePatientList(name);
 		
@@ -111,4 +112,16 @@ public class Main {
 		
 		data.updateTestResult(name, healthNum, doctorNum, testResult, medLabName, date, testId);
 	}
+	
+	public static void searchEngine(){
+		System.out.println("Enter Name or health care number of patient: ");
+		Scanner s1 = new Scanner (System.in);
+		name = s1.nextLine();
+		
+		
+		System.out.println("List of Patients: ");
+		
+		data.searchEngineInfo(name);
+	}
+	
 }
