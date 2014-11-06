@@ -71,8 +71,11 @@ public class Main {
 		System.out.println("List of Patients: ");
 		
 		data.testRecordInfo( name);
-			
+		
+		
 		choosePatientList(name);
+		
+		
 		
 		
 	}
@@ -118,10 +121,15 @@ public class Main {
 		Scanner s1 = new Scanner (System.in);
 		name = s1.nextLine();
 		
+		//if(data.exists == true){
+			System.out.println("List of Patients: ");
+			
+			data.searchEngineInfo(name);
+			//}
+			//else{
+			//	System.out.println("There is no such patient");
+			//}
 		
-		System.out.println("List of Patients: ");
-		
-		data.searchEngineInfo(name);
 	}
 	
 }

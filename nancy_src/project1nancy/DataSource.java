@@ -23,6 +23,7 @@ public class DataSource {
 		int typeId;
 		int employee_no;
 		String test_name, result, date;
+		boolean exists = false;
 		Vector<Integer> healthNum = new Vector<Integer>();
 		Vector<Integer> testId = new Vector<Integer>();
 		Vector<Integer> doctorNum = new Vector<Integer>();
@@ -82,7 +83,7 @@ public class DataSource {
 				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id "+
 				"FROM patient p, test_record t " +
 				"WHERE t.patient_no = p.health_care_no " +
-				"AND p.name = '" + patientInfo + "'";
+				"AND UPPER(p.name) = UPPER ('" + patientInfo + "')";
 				
 				
 				rs = stmt.executeQuery(testRecordQuery);
@@ -123,6 +124,7 @@ public class DataSource {
 		counter = 0;
 		try {
 			if(isInteger(patientInfo)){
+				
 				String testRecordQuery = 
 				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, " +
 				"t.test_id, t.type_id, tt.type_id, tt.test_name, t.test_date, t.result " +
@@ -132,6 +134,7 @@ public class DataSource {
 				"AND t.type_id = tt.type_id";
 				
 				rs = stmt.executeQuery(testRecordQuery);
+				
 				while(rs.next()){
 					
 					patientInfo = rs.getString("name");
@@ -166,7 +169,7 @@ public class DataSource {
 				"t.type_id, tt.type_id, tt.test_name, t.result, t.test_date " +
 				"FROM patient p, test_record t, test_type tt " +
 				"WHERE t.patient_no = p.health_care_no " +
-				"AND p.name = '" + patientInfo + "'" +
+				"AND UPPER(p.name) = UPPER('" + patientInfo + "')" +
 				" AND t.type_id = tt.type_id";
 				
 				
