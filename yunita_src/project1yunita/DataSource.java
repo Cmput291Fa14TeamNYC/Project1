@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
+
+import project1main.Patient;
 
 public class DataSource {
 
@@ -28,19 +31,20 @@ public class DataSource {
 		}
 	}
 
-	
 	/***********************************
 	 * YUNITA***************************
 	 ***********************************
 	 */
 
 	// Method: enterPrescription
-	// >> insert new prescription into record table if patient is allowed to take the specified test
+	// >> insert new prescription into record table if patient is allowed to
+	// take the specified test
 	public void enterPrescription(int employee_no, int patient_no, int type_id) {
 		try {
 			// check whether the patient is allowed to take the specified test type
-			if(this.isAllowed(patient_no, type_id) == false){
-				System.out.println("Sorry this patient is not allowed to take this test!");
+			if (this.isAllowed(patient_no, type_id) == false) {
+				System.out
+						.println("Sorry this patient is not allowed to take this test!");
 			} else {
 				// inserting into record
 				String insertRecordQuery = "INSERT INTO test_record VALUES ("
@@ -57,8 +61,9 @@ public class DataSource {
 	}
 
 	// Method: checkDoctorByEmpNo
-	// >> check whether the doctor with the specified employee no exists in doctor table,
-	//    if yes, then return its employee no
+	// >> check whether the doctor with the specified employee no exists in
+	// doctor table,
+	// if yes, then return its employee no
 	public int checkDoctorByEmpNo(int employee_no) {
 		String selectDoctorQuery = "SELECT * FROM DOCTOR WHERE employee_no = "
 				+ employee_no;
@@ -76,10 +81,9 @@ public class DataSource {
 
 	// Method: checkPatient
 	// >> check whether the patient with the specified patient information
-	//    (name or health care no) exists in patient table
-	//    if yes, then return its test patient no
-	public int checkPatient(String patient_info) {
-		int patient_id = 0;
+	// (name or health care no) exists in patient table
+	public ResultSet checkPatient(String patient_info) {
+
 		try {
 			// checking whether the user enters health care no or patient name
 			if (Util.isInteger(patient_info)) {
@@ -92,19 +96,34 @@ public class DataSource {
 				rs = stmt.executeQuery(selectPatientByNameQuery);
 			}
 
-			if (rs.next()) {
-				patient_id = rs.getInt("health_care_no");
-			}
-
 		} catch (SQLException e) {
 			System.out.println("Could not find the patient.");
 		}
-		return patient_id;
+		return rs;
+	}
+
+	// Method: getPatientList
+	// >> return the list of patients
+	public Vector<Patient> getPatientList(ResultSet rs) {
+		Vector<Patient> patients = new Vector<Patient>();
+		try {
+			while (rs.next()) {
+				Patient patient = new Patient();
+				patient.setHealth_care_no(rs.getInt("health_care_no"));
+				patient.setName(rs.getString("name"));
+				patient.setBirth_day(rs.getDate("birth_day"));
+				patient.setAddress(rs.getString("address"));
+				patient.setPhone(rs.getString("phone"));
+				patients.add(patient);
+			}
+		} catch (SQLException e) {
+		}
+		return patients;
 	}
 
 	// Method: checkTestByName
 	// >> check whether the test name exists in test type table,
-	//    if yes, then return its test type id
+	// if yes, then return its test type id
 	public int checkTestByName(String test_name) {
 		String checkTestQuery = "SELECT * FROM TEST_TYPE WHERE UPPER(test_name) = UPPER('"
 				+ test_name + "')";
@@ -122,7 +141,7 @@ public class DataSource {
 
 	// Method: isAllowed
 	// >> check whether the patient is allowed to take the specified test
-	public boolean isAllowed(int patient_no, int test_id){
+	public boolean isAllowed(int patient_no, int test_id) {
 		String selectNotAllowedQuery = "SELECT * FROM NOT_ALLOWED WHERE health_care_no = "
 				+ patient_no + " AND test_id = " + test_id;
 		boolean isAllowed = true;
@@ -135,7 +154,7 @@ public class DataSource {
 		}
 		return isAllowed;
 	}
-	
+
 	// Method: getLastId
 	// >> return the last id + 1 from the specified table
 	public int getLastId(String col, String table) {
@@ -152,36 +171,40 @@ public class DataSource {
 		return lastId + 1;
 	}
 
-	
 	/*
-	 * List the health_care_no, patient name, test type name, 
-	 * prescribing date of all tests prescribed by a given doctor 
-	 * during a specified time period. The user needs to enter the name 
-	 * or employee_no of the doctor, and the starting and ending dates
-	 *  between which tests are prescribed.
+	 * List the health_care_no, patient name, test type name, prescribing date
+	 * of all tests prescribed by a given doctor during a specified time period.
+	 * The user needs to enter the name or employee_no of the doctor, and the
+	 * starting and ending dates between which tests are prescribed.
 	 */
-	public void listRecordByPrescribedDate(String start_date, String end_date, int employee_no){
-		String selectQuery = 
-		"SELECT r.PATIENT_NO, t.TEST_NAME, p.NAME, r.PRESCRIBE_DATE "
-		+ "FROM TEST_RECORD r, PATIENT p, TEST_TYPE t "
-		+ "WHERE r.PATIENT_NO = p.HEALTH_CARE_NO "
-		+ "AND r.TYPE_ID = t.TYPE_ID "
-		+ "AND r.PRESCRIBE_DATE BETWEEN TO_DATE('"+ start_date +"','DD/MON/YYYY') "
-		+ "AND TO_DATE('"+ end_date +"','DD/MON/YYYY') "
-		+ "AND r.EMPLOYEE_NO =" + employee_no;
-		
-		try{
+	public void listRecordByPrescribedDate(String start_date, String end_date,
+			int employee_no) {
+		String selectQuery = "SELECT r.PATIENT_NO, t.TEST_NAME, p.NAME, r.PRESCRIBE_DATE "
+				+ "FROM TEST_RECORD r, PATIENT p, TEST_TYPE t "
+				+ "WHERE r.PATIENT_NO = p.HEALTH_CARE_NO "
+				+ "AND r.TYPE_ID = t.TYPE_ID "
+				+ "AND r.PRESCRIBE_DATE BETWEEN TO_DATE('"
+				+ start_date
+				+ "','DD/MON/YYYY') "
+				+ "AND TO_DATE('"
+				+ end_date
+				+ "','DD/MON/YYYY') " + "AND r.EMPLOYEE_NO =" + employee_no;
+
+		try {
 			rs = stmt.executeQuery(selectQuery);
-			System.out.println("PATIENT NO \t TEST NAME \t\t\t PATIENT NAME \t\t PRESCRIBE DATE");
-			while(rs.next()){
-				System.out.println(rs.getInt(1) + "\t\t" + rs.getString(2) + "\t\t\t" + rs.getString(3) + "\t\t\t" + rs.getDate(4));
+			System.out
+					.println("PATIENT NO \t TEST NAME \t\t\t PATIENT NAME \t\t PRESCRIBE DATE");
+			while (rs.next()) {
+				System.out
+						.println(rs.getInt(1) + "\t\t" + rs.getString(2)
+								+ "\t\t\t" + rs.getString(3) + "\t\t\t"
+								+ rs.getDate(4));
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			System.out.println("Could not execute the query.");
 		}
 	}
-	
-	
+
 	public void closeConnection() {
 		try {
 			con.close();
@@ -190,5 +213,43 @@ public class DataSource {
 		}
 	}
 
+	// BRETT
+	// -----
+
+	public ResultSet selectPatientByHealthCareNo(int health_care_no) {
+		String patientQuery = "SELECT * FROM patient p WHERE p.health_care_no = "
+				+ health_care_no;
+
+		rs = null;
+		try {
+			rs = stmt.executeQuery(patientQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rs;
+
+	}
+
+	public Patient getPatient(int health_care_no) {
+		Patient patient = new Patient();
+
+		try {
+			if (selectPatientByHealthCareNo(health_care_no).next()) {
+				patient.setHealth_care_no(rs.getInt("health_care_no"));
+				patient.setName(rs.getString("name"));
+				patient.setBirth_day(rs.getDate("birth_day"));
+				patient.setAddress(rs.getString("address"));
+				patient.setPhone(rs.getString("phone"));
+				return patient;
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
