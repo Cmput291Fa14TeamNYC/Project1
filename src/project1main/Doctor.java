@@ -51,5 +51,11 @@ public class Doctor {
 	public void setHealth_care_no(int health_care_no) {
 		this.health_care_no = health_care_no;
 	}
+	
+	public String toString(){
+		String line = this.getEmployee_no() + "\t\t" + this.getClinic_address() + "\t\t" +
+		this.getOffice_phone() + "\t\t" + this.getEmergency_phone();
+		return line;
+	}
 
 }

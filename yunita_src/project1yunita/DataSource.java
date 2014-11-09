@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import project1main.Doctor;
 import project1main.Patient;
 
 public class DataSource {
@@ -59,26 +60,50 @@ public class DataSource {
 			System.out.println("Cannot insert values into Record table.");
 		}
 	}
-
-	// Method: checkDoctorByEmpNo
-	// >> check whether the doctor with the specified employee no exists in
-	// doctor table,
-	// if yes, then return its employee no
-	public int checkDoctorByEmpNo(int employee_no) {
-		String selectDoctorQuery = "SELECT * FROM DOCTOR WHERE employee_no = "
-				+ employee_no;
-		int doctor_id = 0;
+	
+	// Method: checkDoctor
+	// >> check whether the doctor with the specified doctor information
+	// (name or employee) exists in doctor table
+	public ResultSet checkDoctor(String doctor_info) {
 		try {
-			rs = stmt.executeQuery(selectDoctorQuery);
-			if (rs.next()) {
-				doctor_id = rs.getInt("employee_no");
+			// checking whether the user enters employee no or doctor name
+			if (Util.isInteger(doctor_info)) {
+				String selectDoctorByNoQuery = "SELECT * FROM DOCTOR WHERE employee_no = "
+						+ Integer.parseInt(doctor_info);
+				rs = stmt.executeQuery(selectDoctorByNoQuery);
+			} else {
+				String selectDoctorByNameQuery = "SELECT * FROM PATIENT p, DOCTOR d "
+						+ "WHERE p.health_care_no = d.health_care_no AND UPPER(name) = UPPER('"
+						+ doctor_info + "')";
+				rs = stmt.executeQuery(selectDoctorByNameQuery);
 			}
+
 		} catch (SQLException e) {
 			System.out.println("Could not find the doctor.");
 		}
-		return doctor_id;
+		return rs;
 	}
 
+	// Method: getDoctorList
+	// >> return the list of doctors
+	public Vector<Doctor> getDoctorList(ResultSet rs) {
+		Vector<Doctor> doctors = new Vector<Doctor>();
+		try {
+			while (rs.next()) {
+				System.out.println("here");
+				Doctor doctor = new Doctor();
+				doctor.setHealth_care_no(rs.getInt("health_care_no"));
+				doctor.setClinic_address(rs.getString("clinic_address"));
+				doctor.setEmergency_phone(rs.getString("emergence_phone"));
+				doctor.setEmployee_no(rs.getInt("employee_no"));
+				doctor.setOffice_phone(rs.getString("office_phone"));
+				doctors.add(doctor);
+			}
+		} catch (SQLException e) {
+		}
+		return doctors;
+	}
+	
 	// Method: checkPatient
 	// >> check whether the patient with the specified patient information
 	// (name or health care no) exists in patient table
@@ -185,10 +210,10 @@ public class DataSource {
 				+ "AND r.TYPE_ID = t.TYPE_ID "
 				+ "AND r.PRESCRIBE_DATE BETWEEN TO_DATE('"
 				+ start_date
-				+ "','DD/MON/YYYY') "
+				+ "','DD/MM/YYYY') "
 				+ "AND TO_DATE('"
 				+ end_date
-				+ "','DD/MON/YYYY') " + "AND r.EMPLOYEE_NO =" + employee_no;
+				+ "','DD/MM/YYYY') " + "AND r.EMPLOYEE_NO =" + employee_no;
 
 		try {
 			rs = stmt.executeQuery(selectQuery);

@@ -2,6 +2,7 @@ package project1yunita;
 
 import java.util.Vector;
 
+import project1main.Doctor;
 import project1main.Patient;
 
 public class Util {
@@ -24,5 +25,11 @@ public class Util {
 		}
 	}
 	
+	public static void printDoctors(Vector<Doctor> doctors){
+		System.out.println("Employee no \t Clinic address \t\t Office phone \t\t Emergency phone");
+		for(Doctor d : doctors){		
+			System.out.println(d.toString());
+		}
+	}
 	
 }

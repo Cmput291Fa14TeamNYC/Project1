@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 import java.util.Vector;
 
+import project1main.Doctor;
 import project1main.Patient;
 
 public class Main {
@@ -36,12 +37,11 @@ public class Main {
 
 			case 1:
 				/*
-				 * Prescribing new medication 
-				 * -----------------------------
-				 * This component allows a user to enter the detailed
-				 * information about the prescription: the employee_no of the
-				 * doctor who prescribes the test, the test name, the name
-				 * and/or the health_care_no of the patient.
+				 * Prescribing new medication ----------------------------- This
+				 * component allows a user to enter the detailed information
+				 * about the prescription: the employee_no of the doctor who
+				 * prescribes the test, the test name, the name and/or the
+				 * health_care_no of the patient.
 				 */
 				System.out.println("1.Prescribing new medication");
 				prescription(ds);
@@ -57,6 +57,7 @@ public class Main {
 
 			case 4:
 				System.out.println("4.Search Engine");
+				this.searchEngine(ds);
 				break;
 
 			case 5:
@@ -73,8 +74,29 @@ public class Main {
 
 	// later implementation
 	public void searchEngine(DataSource ds) {
-		// testing purpose
-		ds.listRecordByPrescribedDate("1/JAN/2013", "31/DEC/2013", 707070);
+		while (true) {
+			System.out
+					.println("Search record by: Patient info = 1, Prescribed date = 2, Alarming age = 3, Main menu = 0");
+			System.out.print("Enter option: ");
+			Scanner s = new Scanner(System.in);
+			int option = s.nextInt();
+			switch (option) {
+			case 1:
+				System.out.println("By health care no or patient name");
+				// code
+				break;
+			case 2:
+				System.out.println("By prescribed date");
+				this.searchEngineMenu2(ds);
+				break;
+			case 3:
+				System.out.println("By alarming age");
+				// code
+				break;
+			default:
+				return;
+			}
+		}
 	}
 
 	public void prescription(DataSource ds) {
@@ -102,8 +124,10 @@ public class Main {
 				nums[2] = this.getTestName(ds);
 				break;
 			case 4:
-				System.out.println("Employee no: " + nums[0] + ", Health care no: " + nums[1] + ", Test no: " + nums[2]);
-				if(nums[0] != 0 && nums[1] != 0 && nums[2] != 0){
+				System.out.println("Employee no: " + nums[0]
+						+ ", Health care no: " + nums[1] + ", Test no: "
+						+ nums[2]);
+				if (nums[0] != 0 && nums[1] != 0 && nums[2] != 0) {
 					if (ds.isAllowed(nums[1], nums[2])) {
 						ds.enterPrescription(nums[0], nums[1], nums[2]);
 					}
@@ -122,29 +146,35 @@ public class Main {
 	}
 
 	// Method: getEmployeeNo
-	// >> check whether the doctor exists and if exist, then return its employee no
+	// >> obtain the employee no by entering doctor name
 	@SuppressWarnings("resource")
 	public int getEmployeeNo(DataSource ds) {
-		int doctor_id = 0;
 		while (true) {
+			System.out.print("Back = 0. Enter employee no or doctor name: ");
+			Scanner s = new Scanner(System.in);
+			String doctor_info = s.nextLine();
 			try {
-				System.out.print("Back = 0. Enter employee no: ");
-				Scanner s = new Scanner(System.in);
-				int employee_no = s.nextInt();
-				if (employee_no == 0) {
+				int option = Integer.parseInt(doctor_info);
+				if (option == 0) {
 					return 0;
 				}
-				if (ds.checkDoctorByEmpNo(employee_no) == 0) {
-					System.out.println("Doctor wityh employee no: "
-							+ employee_no + " does not exist.");
-					continue;
-				} else {
-					doctor_id = employee_no;
-				}
-				return doctor_id;
 			} catch (Exception e) {
-				System.out.println("Wrong input. Please enter number.");
+			}
+			ResultSet rs = ds.checkDoctor(doctor_info);
+			Vector<Doctor> doctors = ds.getDoctorList(rs);
+			int isExist = doctors.size();
+			System.out.println("size: " + isExist);
+			if (isExist == 0) {
+				System.out.println("Doctor: " + doctor_info
+						+ " does not exist.");
 				continue;
+			} else {
+				Util.printDoctors(doctors);
+				if (isExist > 1) {
+					return getEmployeeNo(ds);
+				} else {
+					return doctors.listIterator(0).next().getEmployee_no();
+				}
 			}
 		}
 	}
@@ -208,6 +238,36 @@ public class Main {
 				System.out.println("Wrong input. Please enter number.");
 				continue;
 			}
+		}
+	}
+
+	// Method: searchEngineMenu2
+	// >> search for all prescribed tests during a specified time period
+	public void searchEngineMenu2(DataSource ds) {
+		System.out
+				.println("Enter doctor info (employee no or name), start date (DD/MM/YYYY), end date (DD/MM/YYYY): ");
+		System.out
+				.println("eg. 1, 01/01/2013, 31/12/2014 or eg. yuri, 01/01/2013, 31/12/2014");
+		Scanner s = new Scanner(System.in);
+		String input[] = null;
+		try {
+			input = s.nextLine().split(", ");
+		} catch (Exception e) {
+			System.out.println("Format input is wrong.");
+		}
+		if (input[1].matches("\\d{2}/\\d{2}/\\d{4}")
+				&& input[2].matches("\\d{2}/\\d{2}/\\d{4}")) {
+			try {
+				ResultSet rs = ds.checkDoctor(input[0]);
+				if (rs.next()) {
+					ds.listRecordByPrescribedDate(input[1], input[2], rs.getInt("employee_no"));
+				} else {
+					System.out.println("Nothing.");
+				}
+			} catch (SQLException e) {
+			}
+		} else {
+			System.out.println("Wrong date format.");
 		}
 	}
 
