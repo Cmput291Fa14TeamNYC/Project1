@@ -167,6 +167,14 @@ public class DataSource {
 	// BRETT
 	// =====
 	
+	
+	/**
+	 * Submits a query to the database retrieving one-row result set of the
+	 * patient matching the provided health care number.
+	 * 
+	 * @param health_care_no
+	 * @return
+	 */
 	public ResultSet selectPatientByHealthCareNo(int health_care_no) {
 		String patientQuery = "SELECT * FROM patient p WHERE p.health_care_no = " + health_care_no;
 		
@@ -181,6 +189,15 @@ public class DataSource {
 		
 	}
 	
+	
+	/**
+	 * Delegates the retrieval of a patient row result set to another 
+	 * method, then converts the patient row from the result set to a 
+	 * patient java object and returns it.
+	 * 
+	 * @param health_care_no
+	 * @return
+	 */
 	public Patient getPatient(int health_care_no) {
 		Patient patient = new Patient();
 		
@@ -203,10 +220,16 @@ public class DataSource {
 		
 	}
 	
+	/**
+	 * Submits an update statement to the database for the patient with the 
+	 * given health care number. It updates the given field with the given value.
+	 * 
+	 * @param health_care_no
+	 * @param field
+	 * @param value
+	 */
+	
 	public void updatePatient(int health_care_no, String field, String value) {
-//		UPDATE table_name
-//		SET column1=value1,column2=value2,...
-//		WHERE some_column=some_value;
 		
 		String patientUpdate = "";
 		

@@ -2,6 +2,7 @@ package project1brett;
 
 import java.util.Scanner;
 
+import project1main.Helpers;
 import project1main.Patient;
 
 public class Main {
@@ -72,6 +73,11 @@ public class Main {
 
 	}
 
+	/**
+	 * Begins the program for updating patient information.
+	 * The program begins by prompting the user for a health care
+	 * number or allowing the user to go back to the main menu.
+	 */
 	private static void runPatientInformationUpdate() {
 		while (true) {
 			
@@ -99,6 +105,15 @@ public class Main {
 		 
 	}
 	
+	/**
+	 * Continues the program for updating patient information update.
+	 * Once the user has entered in a health care number, this method handles
+	 * getting the patient information from the data source and displaying it 
+	 * to the user. Then the user is prompted to select which field they 
+	 * would like to update.
+	 * 
+	 * @param health_care_no	The health care number of the patient to update.
+	 */
 	public static void promptPatientFieldSelection(int health_care_no) {
 		
 		while (true) {
@@ -142,13 +157,45 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Continues the program for updating patient information. Once the user
+	 * has selected which field of the selected patient they would like to 
+	 * update, this method prompts the user to provide new information. The
+	 * new information is then passed to the data source for updating. 
+	 * 
+	 * @param health_care_no
+	 * @param field
+	 */
 	public static void promptPatientFieldUpdate(int health_care_no, String field) {
-		System.out.println("Enter new " + field + ":");
 		
-		Scanner input = new Scanner(System.in);
-		String userInput = input.nextLine();
+		String hint = "";
 		
-		ds.updatePatient(health_care_no, field , userInput);
+		if (field.equals("birth_day")) {
+			hint = "(YYYY-MM-DD)";
+		} else if (field.equals("phone")) {
+			hint = "(10 digits, no spaces)";
+		}
+		
+		while (true) {
+			System.out.println("Enter new " + field + " " + hint + ":");
+			
+			Scanner input = new Scanner(System.in);
+			String userInput = input.nextLine();
+			
+			if (userInput.equals("0")) {
+				System.out.println("Update cancelled.");
+				return;
+			}
+			
+			if(field.equals("phone") && !(Helpers.isInteger(userInput)) || !(userInput.length() == 10)) {
+				System.out.println("Please enter a valid phone number");
+				continue;
+			}
+			
+			ds.updatePatient(health_care_no, field , userInput);
+			return;
+		}
+		
 	}
 
 }

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import project1main.Helpers;
+
 public class DataSource {
 
 	private Connection con = null;
@@ -82,7 +84,7 @@ public class DataSource {
 		int patient_id = 0;
 		try {
 			// checking whether the user enters health care no or patient name
-			if (Util.isInteger(patient_info)) {
+			if (Helpers.isInteger(patient_info)) {
 				String selectPatientByNoQuery = "SELECT * FROM PATIENT WHERE health_care_no = "
 						+ Integer.parseInt(patient_info);
 				rs = stmt.executeQuery(selectPatientByNoQuery);
@@ -189,6 +191,4 @@ public class DataSource {
 			e.printStackTrace();
 		}
 	}
-
-
 }
