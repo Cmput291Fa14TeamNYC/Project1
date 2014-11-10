@@ -80,12 +80,11 @@ public class Main {
 		System.out.println("List of Patients: ");
 		
 		data.testRecordInfo(name);
-		
-		}
+		System.out.println("Enter '00' to go back to the main menu");
 		
 		choosePatientList(name);
-		
-		
+		continue;
+		}
 		
 	}
 	
@@ -95,6 +94,10 @@ public class Main {
 		System.out.println("Please enter a number to choose from the list");
 		Scanner input = new Scanner (System.in);
 		int in = input.nextInt();
+		
+		if(in == 00)
+			menu();
+		else{
 		
 		
 		healthNum = data.healthNum.get(in);
@@ -106,6 +109,7 @@ public class Main {
 		System.out.println("Test Id: " + testId + "\n");
 		
 		enterTestResult(healthNum, testId, doctorNum );
+		}
 	}
 	
 	
