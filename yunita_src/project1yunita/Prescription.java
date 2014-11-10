@@ -74,7 +74,7 @@ public class Prescription {
 						+ " does not exist.");
 				continue;
 			} else {
-				Util.printDoctors(doctors);
+				Helper.printDoctors(doctors);
 				if (isExist > 1) {
 					return getEmployeeNo(ds);
 				} else {
@@ -108,7 +108,7 @@ public class Prescription {
 						+ " does not exist.");
 				continue;
 			} else {
-				Util.printPatients(patients);
+				Helper.printPatients(patients);
 				if (isExist > 1) {
 					return getPatientNo(ds);
 				} else {

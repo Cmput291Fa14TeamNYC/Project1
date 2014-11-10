@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class SearchEngine {
 
-	//search engine menu
+	// search engine menu
 	@SuppressWarnings("resource")
 	public SearchEngine(DataSource ds) {
 		while (true) {
@@ -18,7 +18,7 @@ public class SearchEngine {
 			switch (option) {
 			case 1:
 				System.out.println("By health care no or patient name");
-				// code
+				this.searchEngineMenu1(ds);
 				break;
 			case 2:
 				System.out.println("By prescribed date");
@@ -31,6 +31,26 @@ public class SearchEngine {
 			default:
 				return;
 			}
+		}
+	}
+
+	public void searchEngineMenu1(DataSource ds) {
+		System.out.println("\n"
+				+ "Enter Name or health care number of patient: ");
+		Scanner s1 = new Scanner(System.in);
+		String patient_info = s1.nextLine();
+		try {
+			ResultSet rs = ds.searchEngineInfo(patient_info);
+			if (rs.next()) {
+				System.out.println("HEALTH CARE NO \t PATIENT NAME \t TEST NAME \t TEST DATE \t RESULT");
+				while(rs.next()){
+					System.out.println(rs.getInt(2) + "\t\t" + rs.getString(1) + "\t\t" + rs.getString(8)
+							+ "\t\t" + rs.getDate("test_date") + "\t" + rs.getString("result"));
+				}
+			} else {
+				System.out.println("Nothing.");
+			}
+		} catch (SQLException e) {
 		}
 	}
 
@@ -51,7 +71,8 @@ public class SearchEngine {
 				try {
 					ResultSet rs = ds.checkDoctor(input[0]);
 					if (rs.next()) {
-						ds.listRecordByPrescribedDate(input[1], input[2], rs.getInt("employee_no"));
+						ds.listRecordByPrescribedDate(input[1], input[2],
+								rs.getInt("employee_no"));
 					} else {
 						System.out.println("Nothing.");
 					}
@@ -63,6 +84,6 @@ public class SearchEngine {
 		} catch (Exception e) {
 			System.out.println("Format input is wrong.");
 		}
-
 	}
+
 }
