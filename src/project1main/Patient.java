@@ -64,4 +64,9 @@ public class Patient {
 		this.phone = phone;
 	}	
 	
+	public String toString(){
+		String line = this.getHealth_care_no() + "\t\t" + this.getName() + "\t\t" + this.getAddress() + "\t\t" +
+		this.getBirth_day() + "\t\t" + this.getPhone();
+		return line;
+	}
 }
