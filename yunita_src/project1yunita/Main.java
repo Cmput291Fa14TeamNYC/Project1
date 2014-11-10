@@ -17,7 +17,6 @@ public class Main {
 	public Main() {
 		this.login();
 		menu(ds);
-		
 	}
 
 	public void login() {
@@ -37,59 +36,63 @@ public class Main {
 
 	public void menu(DataSource ds) {
 		while (true) {
-			System.out.println("Main Menu");
-			System.out.println("1.Prescribing New Medication");
-			System.out.println("2.Medical Test Update");
-			System.out.println("3.Patient Information Update");
-			System.out.println("4.Search Engine");
-			System.out.println("5.Exit");
-			System.out.print("Option: ");
-			Scanner input = new Scanner(System.in);
-			int userInput = input.nextInt();
-
-			switch (userInput) {
-
-			case 1:
-				/*
-				 * Prescribing new medication ----------------------------- This
-				 * component allows a user to enter the detailed information
-				 * about the prescription: the employee_no of the doctor who
-				 * prescribes the test, the test name, the name and/or the
-				 * health_care_no of the patient.
-				 */
+			try {
+				System.out.println("Main Menu");
 				System.out.println("1.Prescribing New Medication");
-				Prescription prescription = new Prescription(ds);
-				break;
-
-			case 2:
 				System.out.println("2.Medical Test Update");
-				break;
-
-			case 3:
-				/*
-				 * Patient Information Update -------------------------- This
-				 * component is used to enter the information of a new patient
-				 * or to update the information of an existing patient. All the
-				 * information about a patient, except the health_care_no for an
-				 * existing patient, may be updated.
-				 */
 				System.out.println("3.Patient Information Update");
-				PatientInformation patientInformation = new PatientInformation(
-						ds);
-				break;
-
-			case 4:
 				System.out.println("4.Search Engine");
-				SearchEngine searchEngine = new SearchEngine(ds);
-				break;
-
-			case 5:
 				System.out.println("5.Exit");
-				// terminate program
-				ds.closeConnection();
-				System.out.println("The program is terminated.");
-				System.exit(0);
-				break;
+				System.out.print("Option: ");
+				Scanner input = new Scanner(System.in);
+				int userInput = input.nextInt();
+
+				switch (userInput) {
+
+				case 1:
+					/*
+					 * Prescribing new medication -----------------------------
+					 * This component allows a user to enter the detailed
+					 * information about the prescription: the employee_no of
+					 * the doctor who prescribes the test, the test name, the
+					 * name and/or the health_care_no of the patient.
+					 */
+					System.out.println("1.Prescribing New Medication");
+					Prescription prescription = new Prescription(ds);
+					break;
+
+				case 2:
+					System.out.println("2.Medical Test Update");
+					break;
+
+				case 3:
+					/*
+					 * Patient Information Update --------------------------
+					 * This component is used to enter the information of a new
+					 * patient or to update the information of an existing
+					 * patient. All the information about a patient, except the
+					 * health_care_no for an existing patient, may be updated.
+					 */
+					System.out.println("3.Patient Information Update");
+					PatientInformation patientInformation = new PatientInformation(
+							ds);
+					break;
+
+				case 4:
+					System.out.println("4.Search Engine");
+					SearchEngine searchEngine = new SearchEngine(ds);
+					break;
+
+				case 5:
+					System.out.println("5.Exit");
+					// terminate program
+					ds.closeConnection();
+					System.out.println("The program is terminated.");
+					System.exit(0);
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("Wrong input.");
 			}
 		}
 	}

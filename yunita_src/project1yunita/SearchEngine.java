@@ -10,26 +10,30 @@ public class SearchEngine {
 	@SuppressWarnings("resource")
 	public SearchEngine(DataSource ds) {
 		while (true) {
-			System.out
-					.println("Search record by: Patient info = 1, Prescribed date = 2, Alarming age = 3, Main menu = 0");
-			System.out.print("Enter option: ");
-			Scanner s = new Scanner(System.in);
-			int option = s.nextInt();
-			switch (option) {
-			case 1:
-				System.out.println("By health care no or patient name");
-				this.searchEngineMenu1(ds);
-				break;
-			case 2:
-				System.out.println("By prescribed date");
-				this.searchEngineMenu2(ds);
-				break;
-			case 3:
-				System.out.println("By alarming age");
-				// code
-				break;
-			default:
-				return;
+			try {
+				System.out
+						.println("Search record by: Patient info = 1, Prescribed date = 2, Alarming age = 3, Main menu = 0");
+				System.out.print("Enter option: ");
+				Scanner s = new Scanner(System.in);
+				int option = s.nextInt();
+				switch (option) {
+				case 1:
+					System.out.println("By health care no or patient name");
+					this.searchEngineMenu1(ds);
+					break;
+				case 2:
+					System.out.println("By prescribed date");
+					this.searchEngineMenu2(ds);
+					break;
+				case 3:
+					System.out.println("By alarming age");
+					// code
+					break;
+				default:
+					return;
+				}
+			} catch (Exception e) {
+				System.out.println("Wrong input.");
 			}
 		}
 	}
@@ -42,10 +46,13 @@ public class SearchEngine {
 		try {
 			ResultSet rs = ds.searchEngineInfo(patient_info);
 			if (rs.next()) {
-				System.out.println("HEALTH CARE NO \t PATIENT NAME \t TEST NAME \t TEST DATE \t RESULT");
-				while(rs.next()){
-					System.out.println(rs.getInt(2) + "\t\t" + rs.getString(1) + "\t\t" + rs.getString(8)
-							+ "\t\t" + rs.getDate("test_date") + "\t" + rs.getString("result"));
+				System.out
+						.println("HEALTH CARE NO \t PATIENT NAME \t TEST NAME \t TEST DATE \t RESULT");
+				while (rs.next()) {
+					System.out.println(rs.getInt(2) + "\t\t" + rs.getString(1)
+							+ "\t\t" + rs.getString(8) + "\t\t"
+							+ rs.getDate("test_date") + "\t"
+							+ rs.getString("result"));
 				}
 			} else {
 				System.out.println("Nothing.");

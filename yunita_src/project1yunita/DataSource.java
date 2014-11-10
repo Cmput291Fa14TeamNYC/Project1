@@ -342,5 +342,29 @@ public class DataSource {
 		return rs;
 	}
 
+	public ResultSet testRecordInfo(String patientInfo){
+		try {
+			if(Helper.isInteger(patientInfo)){
+				String testRecordQuery = 
+					"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id " +
+					"FROM patient p, test_record t " +
+					"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
+					" AND t.patient_no = p.health_care_no " +
+					"AND t.result IS NULL" ;
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+			else{
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id "+
+				"FROM patient p, test_record t " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND t.result IS NULL " +
+				"AND UPPER(p.name) = UPPER ('" + patientInfo + "')";		
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+		} catch (SQLException e) {
+		}
+		return rs;
+	}
 	
 }

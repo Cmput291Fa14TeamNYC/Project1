@@ -14,39 +14,43 @@ public class Prescription {
 	public Prescription(DataSource ds) {
 		int nums[] = new int[3];
 		while (true) {
-			System.out
-					.println("Enter Doctor = 1, Patient = 2, Test name = 3, Prescribe = 4, Menu = 0");
-			System.out.print("Enter option: ");
-			Scanner s = new Scanner(System.in);
-			int option = s.nextInt();
-			switch (option) {
-			case 1:
-				nums[0] = this.getEmployeeNo(ds);
-				break;
-			case 2:
-				nums[1] = this.getPatientNo(ds);
-				break;
-			case 3:
-				nums[2] = this.getTestName(ds);
-				break;
-			case 4:
-				System.out.println("Employee no: " + nums[0]
-						+ ", Health care no: " + nums[1] + ", Test no: "
-						+ nums[2]);
-				if (nums[0] != 0 && nums[1] != 0 && nums[2] != 0) {
-					if (ds.isAllowed(nums[1], nums[2])) {
-						ds.enterPrescription(nums[0], nums[1], nums[2]);
+			try {
+				System.out
+						.println("Enter Doctor = 1, Patient = 2, Test name = 3, Prescribe = 4, Menu = 0");
+				System.out.print("Enter option: ");
+				Scanner s = new Scanner(System.in);
+				int option = s.nextInt();
+				switch (option) {
+				case 1:
+					nums[0] = this.getEmployeeNo(ds);
+					break;
+				case 2:
+					nums[1] = this.getPatientNo(ds);
+					break;
+				case 3:
+					nums[2] = this.getTestName(ds);
+					break;
+				case 4:
+					System.out.println("Employee no: " + nums[0]
+							+ ", Health care no: " + nums[1] + ", Test no: "
+							+ nums[2]);
+					if (nums[0] != 0 && nums[1] != 0 && nums[2] != 0) {
+						if (ds.isAllowed(nums[1], nums[2])) {
+							ds.enterPrescription(nums[0], nums[1], nums[2]);
+						}
+						nums[0] = 0;
+						nums[1] = 0;
+						nums[2] = 0;
+						return;
+					} else {
+						System.out.println("Please complete the form.");
 					}
-					nums[0] = 0;
-					nums[1] = 0;
-					nums[2] = 0;
+					break;
+				default:
 					return;
-				} else {
-					System.out.println("Please complete the form.");
 				}
-				break;
-			default:
-				return;
+			} catch (Exception e) {
+				System.out.println("Wrong input.");
 			}
 		}
 	}
