@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import project1main.Doctor;
@@ -342,6 +344,90 @@ public class DataSource {
 			
 		}
 		return rs;
+	}
+
+	public boolean checkTestName(String testName) {
+		try {
+			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
+			if (rs.next()) {
+				return true;
+			} 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Could not get type_id for test named " + testName);
+		}
+		return false;
+	}
+	
+	public List<Patient> getAlarmingAgePatients(String testName) {
+		
+		List<Patient> lst = new ArrayList<Patient>();
+		int typeId;
+		try {
+			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
+			if (rs.next()) {
+				typeId = rs.getInt("type_id");
+			} else {
+				return null;
+			}
+			
+			// create medical risk view
+			stmt.executeUpdate("DROP VIEW medical_risk");
+			stmt.executeUpdate("" 
+					+ "CREATE VIEW medical_risk(medical_type,alarming_age,abnormal_rate) AS"
+					+ "SELECT c1.type_id,min(c1.age),ab_rate"
+					+ "FROM" 
+					+      "(SELECT   t1.type_id, count(distinct t1.patient_no)/count(distinct t2.patient_no) ab_rate"
+					+       "FROM     test_record t1, test_record t2"
+					+       "WHERE    t1.result <> 'normal' AND t1.type_id = t2.type_id"
+					+       "GROUP BY t1.type_id"
+					+       ") r,"
+					+      "(SELECT   t1.type_id,age,COUNT(distinct p1.health_care_no) AS ab_cnt"
+					+       "FROM     patient p1,test_record t1,"
+					+                "(SELECT DISTINCT trunc(months_between(sysdate,p1.birth_day)/12) AS age FROM patient p1)"
+					+       "WHERE    trunc(months_between(sysdate,p1.birth_day)/12)>=age"
+					+                "AND p1.health_care_no=t1.patient_no"
+					+                "AND t1.result<>'normal'"
+					+       "GROUP BY age,t1.type_id"
+					+       ") c1," 
+					+       "(SELECT  t1.type_id,age,COUNT(distinct p1.health_care_no) AS cnt"
+					+        "FROM    patient p1, test_record t1,"
+					+                "(SELECT DISTINCT trunc(months_between(sysdate,p1.birth_day)/12) AS age FROM patient p1)"
+					+        "WHERE trunc(months_between(sysdate,p1.birth_day)/12)>=age"
+					+              "AND p1.health_care_no=t1.patient_no"
+					+        "GROUP BY age,t1.type_id"
+					+       ") c2"
+					+ "WHERE  c1.age = c2.age AND c1.type_id = c2.type_id AND c1.type_id = r.type_id"
+					+        "AND c1.ab_cnt/c2.cnt>=2*r.ab_rate"
+					+ "GROUP BY c1.type_id,ab_rate;");
+			
+			rs = stmt.executeQuery(""
+					+ "SELECT DISTINCT name, address, phone"
+					+ "FROM   patient p, medical_risk m"
+					+ "WHERE  trunc(months_between(sysdate,birth_day)/12) >= m.alarming_age"
+					+ "AND m.medical_type = " + typeId
+					+ "AND"
+					+        "p.health_care_no NOT IN (SELECT patient_no"
+					+                                 "FROM   test_record t"
+					+                                 "WHERE  m.medical_type = t.type_id"
+					+                                ");");
+			
+			while (rs.next()) {
+				Patient patient = new Patient();
+				patient.setName(rs.getString("name"));
+				patient.setAddress(rs.getString("address"));
+				patient.setPhone(rs.getString("phone"));
+				lst.add(patient);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Could not get the alarming age patients.");
+			return null;
+		}
+		
+		return lst;
 	}
 
 }
