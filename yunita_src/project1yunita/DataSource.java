@@ -18,9 +18,8 @@ public class DataSource {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	private final String DRIVERNAME = "oracle.jdbc.driver.OracleDriver";
-	private final String URL = "jdbc:oracle:thin:@localhost:1525:CRS";
 
-	public DataSource(String username, String password) {
+	public DataSource(String URL, String username, String password) {
 		try {
 			Class.forName(DRIVERNAME);
 			con = DriverManager.getConnection(URL, username, password);
@@ -44,7 +43,8 @@ public class DataSource {
 	// take the specified test
 	public void enterPrescription(int employee_no, int patient_no, int type_id) {
 		try {
-			// check whether the patient is allowed to take the specified test type
+			// check whether the patient is allowed to take the specified test
+			// type
 			if (this.isAllowed(patient_no, type_id) == false) {
 				System.out
 						.println("Sorry this patient is not allowed to take this test!");
@@ -62,7 +62,7 @@ public class DataSource {
 			System.out.println("Cannot insert values into Record table.");
 		}
 	}
-	
+
 	// Method: checkDoctor
 	// >> check whether the doctor with the specified doctor information
 	// (name or employee) exists in doctor table
@@ -105,7 +105,7 @@ public class DataSource {
 		}
 		return doctors;
 	}
-	
+
 	// Method: checkPatient
 	// >> check whether the patient with the specified patient information
 	// (name or health care no) exists in patient table
@@ -198,12 +198,10 @@ public class DataSource {
 		return lastId + 1;
 	}
 
-	/*
-	 * List the health_care_no, patient name, test type name, prescribing date
-	 * of all tests prescribed by a given doctor during a specified time period.
-	 * The user needs to enter the name or employee_no of the doctor, and the
-	 * starting and ending dates between which tests are prescribed.
-	 */
+	// Method: listRecordByPrescribedDate
+	// >> list the health care no, patient name, test type name, prescribing
+	// date
+	// of all tests prescribed by a given doctor during a specified period.
 	public void listRecordByPrescribedDate(String start_date, String end_date,
 			int employee_no) {
 		String selectQuery = "SELECT r.PATIENT_NO, t.TEST_NAME, p.NAME, r.PRESCRIBE_DATE "
@@ -236,15 +234,15 @@ public class DataSource {
 		try {
 			con.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Could not close the connection.");
 		}
 	}
 
-	
-	// TODO One of my commits brought the below code into this file. 
-	// TODO Not sure if Yunita needs it, so I left it for now.
-	// BRETT
-	// -----
+
+	/***********************************
+	 * BRETT****************************
+	 ***********************************
+	 */
 
 	public ResultSet selectPatientByHealthCareNo(int health_care_no) {
 		String patientQuery = "SELECT * FROM patient p WHERE p.health_care_no = "
@@ -279,6 +277,33 @@ public class DataSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+
+	}
+
+	public void updatePatient(int health_care_no, String field, String value) {
+		// UPDATE table_name
+		// SET column1=value1,column2=value2,...
+		// WHERE some_column=some_value;
+
+		String patientUpdate = "";
+
+		if (field.equals("name") || field.equals("address")
+				|| field.equals("phone")) {
+			patientUpdate = "UPDATE patient SET " + field + "='" + value
+					+ "' WHERE health_care_no=" + health_care_no;
+		} else if (field.equals("birth_day")) {
+			patientUpdate = "UPDATE patient SET " + field + "=to_date('"
+					+ value + "', 'YYYY-MM-DD') WHERE health_care_no="
+					+ health_care_no;
+		}
+
+		try {
+			stmt.executeUpdate(patientUpdate);
+			con.commit();
+			System.out.println("Patient updated.");
+		} catch (SQLException e) {
+			System.out.println("Sorry, could not update " + field);
 		}
 	}
 }
