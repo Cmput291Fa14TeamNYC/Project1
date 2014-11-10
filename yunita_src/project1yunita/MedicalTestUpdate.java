@@ -8,8 +8,7 @@ public class MedicalTestUpdate {
 	public MedicalTestUpdate(){
 		
 	}
-	
-	
+		
 	public void choosePatientList(DataSource ds){
 		while(true){
 			System.out.println("Enter Name or health care number of patient: ");
@@ -48,7 +47,7 @@ public class MedicalTestUpdate {
 				String updateTestQuery = "UPDATE test_record SET medical_lab = ?, result = ?, test_date = ? "
 					+ " WHERE patient_no = " + healthNum + " AND test_id = " + testId;  
 				
-				updateRecord = con.prepareStatement(updateTestQuery);
+				//updateRecord = con.prepareStatement(updateTestQuery);
 				
 				updateRecord.setString(1, medLabName );
 				updateRecord.setString(2, testResult );
@@ -57,7 +56,7 @@ public class MedicalTestUpdate {
 				
 				updateRecord.executeUpdate();
 				
-				con.commit();
+				//con.commit();
 				System.out.println("Test Results have been added for " + patientName);
 			
 			
@@ -69,5 +68,5 @@ public class MedicalTestUpdate {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

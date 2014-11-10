@@ -2,7 +2,10 @@ package project1yunita;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
+
+import project1main.Patient;
 
 public class SearchEngine {
 
@@ -90,6 +93,35 @@ public class SearchEngine {
 			}
 		} catch (Exception e) {
 			System.out.println("Format input is wrong.");
+		}
+	}
+	
+	public void searchEngineMenu3(DataSource ds) {
+		// TODO: finish searchEngine3
+		
+		while (true) {
+			System.out.println("Alarming Age Search Engine");
+			System.out.println("Back = 0. Please enter a test name:");
+			Scanner scanner = new Scanner(System.in);
+			String testName = scanner.nextLine();
+			
+			if (testName.equals("0")) {
+				return;
+			}
+			
+			if (!ds.checkTestName(testName)) {
+				System.out.println("Please enter a valid test name");
+				continue;
+			}
+			
+			System.out.println("Patients who have reached alarming age for " + testName + "but have not taken that test:");
+			List<Patient> patientLst = ds.getAlarmingAgePatients(testName);
+			for (Patient patient : patientLst) {
+				System.out.println(patient.getName());
+				System.out.println(patient.getAddress());
+				System.out.println(patient.getPhone());
+				System.out.println("--------------------");
+			}
 		}
 	}
 
