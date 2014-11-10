@@ -82,6 +82,7 @@ public class DataSource {
 				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id "+
 				"FROM patient p, test_record t " +
 				"WHERE t.patient_no = p.health_care_no " +
+				"AND t.result IS NULL " +
 				"AND UPPER(p.name) = UPPER ('" + patientInfo + "')";
 				
 				
