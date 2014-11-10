@@ -1,4 +1,4 @@
-package project1yunita;
+package project1main;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -84,10 +84,6 @@ public class SearchEngine {
 		} catch (Exception e) {
 			System.out.println("Format input is wrong.");
 		}
-	}
-	
-	public void searchEngineMenu3(DataSource ds) {
-		List<Patient> = ds.getAlarmingAgePatients();
 	}
 
 }
