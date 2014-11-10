@@ -9,8 +9,7 @@ import java.util.Vector;
 
 import project1main.Doctor;
 import project1main.Patient;
-
-import project1main.Helpers;
+import project1main.TestRecord;
 
 public class DataSource {
 
@@ -18,7 +17,8 @@ public class DataSource {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	private final String DRIVERNAME = "oracle.jdbc.driver.OracleDriver";
-
+	private boolean isConnected = true;
+	
 	public DataSource(String URL, String username, String password) {
 		try {
 			Class.forName(DRIVERNAME);
@@ -26,13 +26,17 @@ public class DataSource {
 			stmt = con.createStatement();
 		} catch (SQLException e) {
 			System.out.println("Cannot connect to database.");
-			e.printStackTrace();
+			isConnected = false;
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class is not found.");
-			e.printStackTrace();
+			isConnected = false;
 		}
 	}
 
+	public boolean isConnected(){
+		return isConnected;
+	}
+	
 	/***********************************
 	 * YUNITA***************************
 	 ***********************************
@@ -69,7 +73,7 @@ public class DataSource {
 	public ResultSet checkDoctor(String doctor_info) {
 		try {
 			// checking whether the user enters employee no or doctor name
-			if (Util.isInteger(doctor_info)) {
+			if (Helper.isInteger(doctor_info)) {
 				String selectDoctorByNoQuery = "SELECT * FROM DOCTOR WHERE employee_no = "
 						+ Integer.parseInt(doctor_info);
 				rs = stmt.executeQuery(selectDoctorByNoQuery);
@@ -113,7 +117,8 @@ public class DataSource {
 
 		try {
 			// checking whether the user enters health care no or patient name
-			if (Helpers.isInteger(patient_info)) {
+
+			if (Helper.isInteger(patient_info)) {
 				String selectPatientByNoQuery = "SELECT * FROM PATIENT WHERE health_care_no = "
 						+ Integer.parseInt(patient_info);
 				rs = stmt.executeQuery(selectPatientByNoQuery);
@@ -306,4 +311,37 @@ public class DataSource {
 			System.out.println("Sorry, could not update " + field);
 		}
 	}
+
+	/*
+	 * 
+	 * 
+	 */
+	
+	public ResultSet searchEngineInfo(String patient_info){
+		try{
+			if(Helper.isInteger(patient_info)){
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, " +
+				"t.test_id, t.type_id, tt.type_id, tt.test_name, t.test_date, t.result " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE " + " p.health_care_no = " + Integer.parseInt(patient_info) + 
+				" AND t.patient_no = p.health_care_no " +
+				"AND t.type_id = tt.type_id";
+				rs = stmt.executeQuery(testRecordQuery);
+			}else {
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id, "+
+				"t.type_id, tt.type_id, tt.test_name, t.result, t.test_date " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND UPPER(p.name) = UPPER('" + patient_info + "')" +
+				" AND t.type_id = tt.type_id";
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+		} catch(SQLException e){
+			
+		}
+		return rs;
+	}
+
 }
