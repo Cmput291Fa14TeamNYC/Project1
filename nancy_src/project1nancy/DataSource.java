@@ -52,7 +52,8 @@ public class DataSource {
 					"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id " +
 					"FROM patient p, test_record t " +
 					"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
-					" AND t.patient_no = p.health_care_no";
+					" AND t.patient_no = p.health_care_no " +
+					"AND t.result IS NULL" ;
 				rs = stmt.executeQuery(testRecordQuery);
 				while(rs.next()){
 					
