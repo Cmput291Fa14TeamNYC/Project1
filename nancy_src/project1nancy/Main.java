@@ -71,7 +71,7 @@ public class Main {
 	public static void enterMedicalInfo(){
 		
 		
-		while(data.counter == 0){
+		while(data.counter == 0 || true){
 		System.out.println("Enter Name or health care number of patient: ");
 		Scanner s1 = new Scanner (System.in);
 		name = s1.nextLine();
@@ -80,15 +80,23 @@ public class Main {
 		System.out.println("List of Patients: ");
 		
 		data.testRecordInfo(name);
-		System.out.println("Enter '0' to go back to the main menu");
+		
+		if(data.counter <= 0){
+			System.out.println("Enter '0' to go back to the main menu");
+			
+			
+		}
+		else 
+			choosePatientList(name);
 		
 		if(name.compareTo("0") == 0)
 			menu();
 		else
 		continue;
 		
-		break;
 		
+		
+		break;
 		}
 	}
 	
@@ -99,9 +107,6 @@ public class Main {
 		Scanner input = new Scanner (System.in);
 		int in = input.nextInt();
 		
-		if(in == 3)
-			menu();
-		else{
 		
 		
 		healthNum = data.healthNum.get(in);
@@ -113,7 +118,11 @@ public class Main {
 		System.out.println("Test Id: " + testId + "\n");
 		
 		enterTestResult(healthNum, testId, doctorNum );
-		}
+		
+		
+		
+			menu();
+		
 	}
 	
 	
