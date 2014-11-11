@@ -376,6 +376,19 @@ public class DataSource {
 		return lst;
 	}
 
+	public boolean checkTestName(String testName) {
+		try {
+			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
+			if (rs.next()) {
+				return true;
+			} 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Could not get type_id for test named " + testName);
+		}
+		return false;
+
+	}
 	
 	/***********************************
 	 * NANCY****************************
@@ -434,19 +447,7 @@ public class DataSource {
 		return rs;
 	}
 	
-	public boolean checkTestName(String testName) {
-		try {
-			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
-			if (rs.next()) {
-				return true;
-			} 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Could not get type_id for test named " + testName);
-		}
-		return false;
 
-	}
 	
 	public Vector<TestRecord> getRecordList(ResultSet rs) {
 		Vector<TestRecord> records = new Vector<TestRecord>();
