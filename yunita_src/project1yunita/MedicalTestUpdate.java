@@ -5,68 +5,65 @@ import java.util.*;
 
 public class MedicalTestUpdate {
 	
-	public MedicalTestUpdate(){
-		
+	public MedicalTestUpdate(DataSource ds){
+		TestRecord tr = getMedicalTest(ds);
+		this.enterTestResult(ds, tr.getPatient_no(), tr.getTest_id(), tr.getEmployee_no());
 	}
-		
-	public void choosePatientList(DataSource ds){
-		while(true){
-			System.out.println("Enter Name or health care number of patient: ");
-			Scanner s1 = new Scanner (System.in);
-			String patient_info = s1.nextLine();
-		try{
-			ResultSet rs = ds.testRecordInfo(patient_info);
-			if (rs.next()) {
-				System.out
-						.println("HEALTH CARE NO \t PATIENT NAME \t EMPLOYEE NO \t TEST ID");
-				while (rs.next()) {
-					System.out.println(rs.getInt("health_care_no") + "\t\t" + rs.getString("name")
-							+ "\t\t" + rs.getInt("employee_no") + "\t\t"
-							+ rs.getInt("test_id"));
-					}
-			} else {
-				System.out.println("Nothing.");
-			}
-		}catch(SQLException e){
-			System.out.println();
-			}
-		}		
-	}
-
-	/*If there exists such a patient and test record and prescription
-	 * then allow the user to enter in the information of the test
-	 * such as lab name, test date, the test result**/
 	
-	public void updateTestResult(String patientName, int healthNum, int doctorNum, String testResult, 
-			String medLabName, String date, int testId){
-		try {
-				
-				PreparedStatement updateRecord = null;
-			
-				
-				String updateTestQuery = "UPDATE test_record SET medical_lab = ?, result = ?, test_date = ? "
-					+ " WHERE patient_no = " + healthNum + " AND test_id = " + testId;  
-				
-				//updateRecord = con.prepareStatement(updateTestQuery);
-				
-				updateRecord.setString(1, medLabName );
-				updateRecord.setString(2, testResult );
-				updateRecord.setString(3, date );
-				
-				
-				updateRecord.executeUpdate();
-				
-				//con.commit();
-				System.out.println("Test Results have been added for " + patientName);
-			
-			
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Your request cannot be completed. Please check your entries");
-			e.printStackTrace();
+	@SuppressWarnings("resource")
+	public TestRecord getMedicalTest(DataSource ds) {
+		while (true) {
+			System.out.print("Back = 0. Enter name or health care number of patient:  ");
+			Scanner s = new Scanner(System.in);
+			String patient_info = s.nextLine();
+			try {
+				int option = Integer.parseInt(patient_info);
+				if (option == 0) {
+					return null;
+				}
+			} catch (Exception e) {
+			}
+			ResultSet rs = ds.checkRecord(patient_info);
+			Vector<TestRecord> records = ds.getRecordList(rs);
+			int isExist = records.size();
+			System.out.println("size: " + isExist);
+			if (isExist == 0) {
+				System.out.println("Nothing.");
+				continue;
+			} else {
+				Helper.printRecords(records);
+				if (isExist > 1) {
+					while(true){
+						System.out.print("Enter test id:  ");
+						int id = new Scanner(System.in).nextInt();
+						for(TestRecord t : records){
+							if(t.getTest_id() == id){
+								return t;
+							}
+						}
+					}
+				} else {
+					return records.listIterator(0).next();
+				}
+			}
 		}
 	}
 
+	@SuppressWarnings("resource")
+	public void enterTestResult(DataSource data, int healthNum, int testId, int doctorNum){
+		System.out.println("Enter Name of medical lab: ");
+		Scanner s1 = new Scanner (System.in);
+		String medLabName = s1.nextLine();
+		
+		System.out.println("Enter date of test: ");
+		Scanner s2 = new Scanner (System.in);
+		String date = s2.nextLine();
+		
+		System.out.println("Enter test result: ");
+		Scanner s3 = new Scanner (System.in);
+		String testResult = s3.nextLine();
+		
+		data.updateTestResult(healthNum, doctorNum, testResult, medLabName, date, testId);
+	}
+	
 }

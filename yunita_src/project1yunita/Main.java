@@ -3,9 +3,6 @@ package project1yunita;
 import java.sql.*;
 import java.util.*;
 
-import project1main.Doctor;
-import project1main.Patient;
-
 public class Main {
 
 	private final static String DB_URL = "jdbc:oracle:thin:@localhost:1525:CRS";
@@ -19,6 +16,7 @@ public class Main {
 		menu(ds);
 	}
 
+	@SuppressWarnings("resource")
 	public void login() {
 		while (true) {
 			System.out.print("Enter username: ");
@@ -34,6 +32,7 @@ public class Main {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public void menu(DataSource ds) {
 		while (true) {
 			try {
@@ -63,6 +62,7 @@ public class Main {
 
 				case 2:
 					System.out.println("2.Medical Test Update");
+					MedicalTestUpdate mtu = new MedicalTestUpdate(ds);
 					break;
 
 				case 3:
@@ -92,7 +92,6 @@ public class Main {
 					break;
 				}
 			} catch (Exception e) {
-				System.out.println("Wrong input.");
 			}
 		}
 	}

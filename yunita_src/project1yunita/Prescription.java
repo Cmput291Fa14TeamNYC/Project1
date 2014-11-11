@@ -4,9 +4,6 @@ import java.sql.ResultSet;
 import java.util.Scanner;
 import java.util.Vector;
 
-import project1main.Doctor;
-import project1main.Patient;
-
 public class Prescription {
 
 	// prescription menu

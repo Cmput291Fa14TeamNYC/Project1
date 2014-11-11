@@ -2,8 +2,6 @@ package project1yunita;
 
 import java.util.Scanner;
 
-import project1main.Patient;
-
 public class PatientInformation {
 	
 	@SuppressWarnings("resource")

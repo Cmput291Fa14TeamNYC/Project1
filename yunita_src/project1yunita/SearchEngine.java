@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import project1main.Patient;
-
 public class SearchEngine {
 
 	// search engine menu
@@ -30,7 +28,7 @@ public class SearchEngine {
 					break;
 				case 3:
 					System.out.println("By alarming age");
-					// code
+					this.searchEngineMenu3(ds);
 					break;
 				default:
 					return;
@@ -96,6 +94,7 @@ public class SearchEngine {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public void searchEngineMenu3(DataSource ds) {
 		// TODO: finish searchEngine3
 		

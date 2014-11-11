@@ -1,17 +1,8 @@
 package project1yunita;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.sql.*;
+import java.util.*;
 
-import project1main.Doctor;
-import project1main.Patient;
-import project1main.TestRecord;
 
 public class DataSource {
 
@@ -313,78 +304,6 @@ public class DataSource {
 			System.out.println("Sorry, could not update " + field);
 		}
 	}
-
-	/*
-	 * 
-	 * 
-	 */
-	
-	public ResultSet searchEngineInfo(String patient_info){
-		try{
-			if(Helper.isInteger(patient_info)){
-				String testRecordQuery = 
-				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, " +
-				"t.test_id, t.type_id, tt.type_id, tt.test_name, t.test_date, t.result " +
-				"FROM patient p, test_record t, test_type tt " +
-				"WHERE " + " p.health_care_no = " + Integer.parseInt(patient_info) + 
-				" AND t.patient_no = p.health_care_no " +
-				"AND t.type_id = tt.type_id";
-				rs = stmt.executeQuery(testRecordQuery);
-			}else {
-				String testRecordQuery = 
-				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id, "+
-				"t.type_id, tt.type_id, tt.test_name, t.result, t.test_date " +
-				"FROM patient p, test_record t, test_type tt " +
-				"WHERE t.patient_no = p.health_care_no " +
-				"AND UPPER(p.name) = UPPER('" + patient_info + "')" +
-				" AND t.type_id = tt.type_id";
-				rs = stmt.executeQuery(testRecordQuery);
-			}
-		} catch(SQLException e){
-			
-		}
-		return rs;
-	}
-
-	public ResultSet testRecordInfo(String patientInfo){
-		try {
-			if(Helper.isInteger(patientInfo)){
-				String testRecordQuery = 
-					"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id " +
-					"FROM patient p, test_record t " +
-					"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
-					" AND t.patient_no = p.health_care_no " +
-					"AND t.result IS NULL" ;
-				rs = stmt.executeQuery(testRecordQuery);
-			}
-			else{
-				String testRecordQuery = 
-				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id "+
-				"FROM patient p, test_record t " +
-				"WHERE t.patient_no = p.health_care_no " +
-				"AND t.result IS NULL " +
-				"AND UPPER(p.name) = UPPER ('" + patientInfo + "')";		
-				rs = stmt.executeQuery(testRecordQuery);
-			}
-		} catch (SQLException e) {
-		}
-		return rs;
-	}
-	
-	public boolean checkTestName(String testName) {
-		try {
-			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
-			if (rs.next()) {
-				return true;
-			} 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Could not get type_id for test named " + testName);
-		}
-		return false;
-
-	}
-	
 	
 	public List<Patient> getAlarmingAgePatients(String testName) {
 		
@@ -457,4 +376,118 @@ public class DataSource {
 		return lst;
 	}
 
+	
+	/***********************************
+	 * NANCY****************************
+	 ***********************************
+	 */
+	
+	public ResultSet searchEngineInfo(String patient_info){
+		try{
+			if(Helper.isInteger(patient_info)){
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, " +
+				"t.test_id, t.type_id, tt.type_id, tt.test_name, t.test_date, t.result " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE " + " p.health_care_no = " + Integer.parseInt(patient_info) + 
+				" AND t.patient_no = p.health_care_no " +
+				"AND t.type_id = tt.type_id";
+				rs = stmt.executeQuery(testRecordQuery);
+			}else {
+				String testRecordQuery = 
+				"SELECT p.name, p.health_care_no, t.patient_no, t.employee_no, t.test_id, "+
+				"t.type_id, tt.type_id, tt.test_name, t.result, t.test_date " +
+				"FROM patient p, test_record t, test_type tt " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND UPPER(p.name) = UPPER('" + patient_info + "')" +
+				" AND t.type_id = tt.type_id";
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+		} catch(SQLException e){
+			
+		}
+		return rs;
+	}
+
+	public ResultSet checkRecord(String patientInfo){
+		try {
+			if(Helper.isInteger(patientInfo)){
+				String testRecordQuery = 
+					"SELECT * " +
+					"FROM patient p, test_record t " +
+					"WHERE " + " p.health_care_no = " + Integer.parseInt(patientInfo) + 
+					" AND t.patient_no = p.health_care_no " +
+					"AND t.result IS NULL" ;
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+			else{
+				String testRecordQuery = 
+				"SELECT * "+
+				"FROM patient p, test_record t " +
+				"WHERE t.patient_no = p.health_care_no " +
+				"AND t.result IS NULL " +
+				"AND UPPER(p.name) = UPPER ('" + patientInfo + "')";		
+				rs = stmt.executeQuery(testRecordQuery);
+			}
+		} catch (SQLException e) {
+		}
+		return rs;
+	}
+	
+	public boolean checkTestName(String testName) {
+		try {
+			rs = stmt.executeQuery("SELECT type_id FROM test_type t WHERE UPPER(t.test_name) = " + testName.toUpperCase());
+			if (rs.next()) {
+				return true;
+			} 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Could not get type_id for test named " + testName);
+		}
+		return false;
+
+	}
+	
+	public Vector<TestRecord> getRecordList(ResultSet rs) {
+		Vector<TestRecord> records = new Vector<TestRecord>();
+		try {
+			while (rs.next()) {
+				TestRecord record = new TestRecord();
+				record.setTest_id(rs.getInt("test_id"));
+				record.setType_id(rs.getInt("type_id"));
+				record.setPatient_no(rs.getInt("patient_no"));
+				record.setEmployee_no(rs.getInt("employee_no"));
+				record.setMedical_lab(rs.getString("medical_lab"));
+				record.setResult(rs.getString("result"));
+				record.setPrescribe_date(rs.getDate("prescribe_date"));
+				record.setTest_date(rs.getDate("test_date"));
+				records.add(record);
+			}
+		} catch (SQLException e) {
+		}
+		return records;
+	}
+	
+	/*If there exists such a patient and test record and prescription
+	 * then allow the user to enter in the information of the test
+	 * such as lab name, test date, the test result**/
+	public void updateTestResult(int healthNum, int doctorNum, String testResult, 
+			String medLabName, String date, int testId){
+		try {
+				
+				PreparedStatement updateRecord = null;				
+				String updateTestQuery = "UPDATE test_record SET medical_lab = ?, result = ?, test_date = ? "
+					+ " WHERE patient_no = " + healthNum + " AND test_id = " + testId;  
+				updateRecord = con.prepareStatement(updateTestQuery);
+				updateRecord.setString(1, medLabName );
+				updateRecord.setString(2, testResult );
+				updateRecord.setString(3, date );
+				updateRecord.executeUpdate();
+				con.commit();
+				System.out.println("Test Results have been added for record#: " + testId);
+		} catch (SQLException e) {
+			System.out.println("Your request cannot be completed. Please check your entries");
+		}
+	}
+	
 }

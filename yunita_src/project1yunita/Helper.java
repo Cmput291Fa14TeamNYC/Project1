@@ -2,10 +2,6 @@ package project1yunita;
 
 import java.util.Vector;
 
-import project1main.Doctor;
-import project1main.Patient;
-import project1main.TestRecord;
-
 public class Helper {
 	
 	public Helper(){}
@@ -30,6 +26,13 @@ public class Helper {
 		System.out.println("Employee no \t Clinic address \t\t Office phone \t\t Emergency phone");
 		for(Doctor d : doctors){		
 			System.out.println(d.toString());
+		}
+	}
+	
+	public static void printRecords(Vector<TestRecord> records){
+		System.out.println("Test id \t Health care no \t\t Employee no \t\t Prescribe date");
+		for(TestRecord r : records){		
+			System.out.println(r.toString());
 		}
 	}
 	
