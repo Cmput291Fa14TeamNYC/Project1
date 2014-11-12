@@ -1,8 +1,6 @@
-package project1main;
+
 
 import java.util.Scanner;
-
-import project1main.Patient;
 
 public class PatientInformation {
 	
