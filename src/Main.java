@@ -42,7 +42,7 @@ public class Main {
 				System.out.println("2.Medical Test Update");
 				System.out.println("3.Patient Information Update");
 				System.out.println("4.Search Engine");
-				System.out.println("5.Exit");
+				System.out.println("0.Exit");
 				System.out.print("Option: ");
 				Scanner input = new Scanner(System.in);
 				int userInput = input.nextInt();
@@ -84,8 +84,8 @@ public class Main {
 					SearchEngine searchEngine = new SearchEngine(ds);
 					break;
 
-				case 5:
-					System.out.println("5.Exit");
+				case 0:
+					System.out.println("0.Exit");
 					// terminate program
 					ds.closeConnection();
 					System.out.println("Goodbye.");
