@@ -34,6 +34,8 @@ public class Prescription {
 					if (nums[0] != 0 && nums[1] != 0 && nums[2] != 0) {
 						if (ds.isAllowed(nums[1], nums[2])) {
 							ds.enterPrescription(nums[0], nums[1], nums[2]);
+						} else {
+							System.out.println("Patient is not allowed to take that test.");
 						}
 						nums[0] = 0;
 						nums[1] = 0;
