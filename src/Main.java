@@ -6,6 +6,7 @@ import java.util.*;
 public class Main {
 
 	private final static String DB_URL = "jdbc:oracle:thin:@localhost:1525:CRS";
+	// private final static String DB_URL = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS"
 	// private final static String DB_USERNAME; = "commande";
 	// private final static String DB_PASSWORD; = "Alexsq2014";
 
@@ -87,7 +88,7 @@ public class Main {
 					System.out.println("5.Exit");
 					// terminate program
 					ds.closeConnection();
-					System.out.println("The program is terminated.");
+					System.out.println("Goodbye.");
 					System.exit(0);
 					break;
 				}
@@ -97,7 +98,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Hello Yunita");
+		System.out.println("Welcome to Alberta Health Care Database System");
 		Main m = new Main();
 	}
 }
