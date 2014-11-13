@@ -113,8 +113,11 @@ public class SearchEngine {
 				continue;
 			}
 			
-			System.out.println("Patients who have reached alarming age for " + testName + "but have not taken that test:");
+			System.out.println("Patients who have reached alarming age for " + testName + " but have not taken that test:");
 			List<Patient> patientLst = ds.getAlarmingAgePatients(testName);
+			if (patientLst.size() == 0) {
+				System.out.println("None");
+			}
 			for (Patient patient : patientLst) {
 				System.out.println(patient.getName());
 				System.out.println(patient.getAddress());
