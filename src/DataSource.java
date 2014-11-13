@@ -89,7 +89,6 @@ public class DataSource {
 		Vector<Doctor> doctors = new Vector<Doctor>();
 		try {
 			while (rs.next()) {
-				System.out.println("here");
 				Doctor doctor = new Doctor();
 				doctor.setHealth_care_no(rs.getInt("health_care_no"));
 				doctor.setClinic_address(rs.getString("clinic_address"));

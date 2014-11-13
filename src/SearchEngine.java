@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Vector;
 
 public class SearchEngine {
 
@@ -81,13 +82,22 @@ public class SearchEngine {
 					&& input[2].matches("\\d{2}/\\d{2}/\\d{4}")) {
 				try {
 					ResultSet rs = ds.checkDoctor(input[0]);
-					if (rs.next()) {
-						ds.listRecordByPrescribedDate(input[1], input[2],
-								rs.getInt("employee_no"));
+					Vector<Doctor> doctors = ds.getDoctorList(rs);
+					int emp_no = 0;
+					if(doctors.size() > 1){
+						Helper.printDoctors(doctors);
+						try{
+							System.out.print("Enter employee no from the list: ");
+							emp_no = new Scanner(System.in).nextInt();
+						}catch(Exception e){System.out.println("Does not exist.");}
 					} else {
-						System.out.println("Nothing.");
+						emp_no = doctors.get(0).getEmployee_no();
 					}
-				} catch (SQLException e) {
+					System.out.println(">>" + emp_no);
+						ds.listRecordByPrescribedDate(input[1], input[2],
+								emp_no);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			} else {
 				System.out.println("Wrong date format.");
