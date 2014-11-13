@@ -46,16 +46,19 @@ public class SearchEngine {
 		String patient_info = s1.nextLine();
 		try {
 			ResultSet rs = ds.searchEngineInfo(patient_info);
-			if (rs.next()) {
-				System.out
+			int counter = 0;
+			while (rs.next()) {
+				if (counter == 0) {
+					System.out
 						.println("HEALTH CARE NO \t PATIENT NAME \t TEST NAME \t TEST DATE \t RESULT");
-				while (rs.next()) {
-					System.out.println(rs.getInt(2) + "\t\t" + rs.getString(1)
-							+ "\t\t" + rs.getString(8) + "\t\t"
-							+ rs.getDate("test_date") + "\t"
-							+ rs.getString("result"));
 				}
-			} else {
+				System.out.println(rs.getInt(2) + "\t\t" + rs.getString(1)
+						+ "\t\t" + rs.getString(8) + "\t\t"
+						+ rs.getDate("test_date") + "\t"
+						+ rs.getString("result"));
+				counter ++;
+			}
+			if (counter == 0) {
 				System.out.println("Nothing.");
 			}
 		} catch (SQLException e) {
